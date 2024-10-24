@@ -1,7 +1,7 @@
 # Group-Project-3308
 Application Description:
 
-Contributors:
+Contributors: Arielan Palencia Li, Oliver Costello, Brie Brocato, Suhani Agarwal, Kristin Off
 
 Technology Stack Used:
 
