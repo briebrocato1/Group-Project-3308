@@ -6,7 +6,7 @@ Contributors: Arielan Palencia Li, Oliver Costello, Brie Brocato, Suhani Agarwal
 Technology Stack Used:
 
 Prerequisites:
-
+https://github.com/OpenBeta/climbing-data/tree/main
 Instructions:
 
 How to run tests:
