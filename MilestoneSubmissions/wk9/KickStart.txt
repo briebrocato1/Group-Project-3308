@@ -1,0 +1,27 @@
+Team number : 014-7
+Team Name: Boulderz
+Team Members: 
+Arielan Palencia Li - arpa7955 - arpa7955@colorado.edu
+Suhani Agarwal - apsuhani20 - suag8482@colorado.edu
+Brie Brocato - briebrocato1 - brbr6823@colorado.edu
+Kristin Off - OffK42 - krof5695@colorado.edu
+Oliver Costello - occostello - olco2433@colorado.edu
+Application Name: Bouldering Buffs
+Application Description:
+We are making an interactive database of rock climbing routes in the Boulder area. We are creating a website catered to college students interested in climbing, with the ability to browse local routes, search for specific routes, view a message board, and create user profiles. Once logged into their profile, users will be able to add new routes, review/rate routes, post to the message board, and find climbing partners. 
+Our site will include a full database of climbs in the Boulder area, pulled from MountainProject. We will include the option for climbers to add their own routes, given they have proper documentation of the climbs.
+Our tech stack is HTML, CSS, PostgreSQL, Docker, and NodeJS. We will be using Bootstrap as our front-end styling library.
+Vision Statement: 
+ “Help Boulder climbers form a community through rating climbing routes, discovering new places to climb, and finding climbing partners.”
+Version Control: 
+Repository Link: https://github.com/briebrocato1/Group-Project-3308/tree/main 
+Development Methodology: 
+We will be using Agile Methodology.
+Communication Plan:
+We will be using a Slack channel to communicate during the project period
+Meeting Plan:
+Team Meetings: Wednesdays 5:15 pm and Thursdays 6:30 pm @ EC or Norlin Study Rooms
+TA Meetings: Wednesdays 4:15 pm online
+ Case Diagram: In separate file
+ 
+Wireframes: In separate files
