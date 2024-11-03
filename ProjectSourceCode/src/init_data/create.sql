@@ -7,7 +7,7 @@ CREATE TABLE users (
 
 DROP TABLE IF EXISTS routes;
 CREATE TABLE routes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY NOT NULL,
     routeName VARCHAR(255) NOT NULL,
     grade VARCHAR(10),
     safety VARCHAR(10),
