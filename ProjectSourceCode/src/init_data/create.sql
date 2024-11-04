@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   username VARCHAR(50) PRIMARY KEY,
-  email varchar(60) NOT NULL,
+  email VARCHAR(60) NOT NULL,
   password CHAR(60) NOT NULL
 );
 
 DROP TABLE IF EXISTS routes;
 CREATE TABLE routes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     routeName VARCHAR(255) NOT NULL,
     grade VARCHAR(10),
     safety VARCHAR(10),
@@ -28,7 +28,7 @@ CREATE TABLE routes (
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     author VARCHAR(50) NOT NULL,
     text VARCHAR(2500) NOT NULL,
     parentID INT
