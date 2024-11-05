@@ -63,13 +63,51 @@ const hbs = handlebars.create({
         res.redirect('/home');
       });
 
-      app.get('/login', (req, res) => {
+      app.get('/register', (req,res) => {
+        res.render('pages/register');
+    });
+    app.post('/register', async (req, res) => {
+        try{
+        //hash the password using bcrypt library
+        const hash = await bcrypt.hash(req.body.password, 10);
+      
+        // To-DO: Insert username and hashed password into the 'users' table
+        await db.none(
+            `INSERT INTO users(username, password) VALUES ($1, $2);`,
+            [req.body.username, hash]
+        );
+        res.redirect('/login?message=Successfully Registered')
+    }
+        catch(err) {
+            res.redirect('/register?message=Unable to Register')
+        }
+      });
+      
+    app.get('/login', (req,res) => {
         res.render('pages/login');
     });
 
-    app.get('/register', (req, res) => {
-        res.render('pages/register');
-      });
+    app.post('/login', async (req, res) => {
+        try {
+                const user = await db.oneOrNone(
+                `SELECT * FROM users WHERE username = $1;`,
+                [req.body.username]
+            );
+            if (!user) {
+                return res.redirect('/register?message=User not found. Please register.');
+            }
+            const match = await bcrypt.compare(req.body.password, user.password);
+            if (!match) {
+                return res.render('login', { message: 'Incorrect username or password.' });
+            }
+            req.session.user = user;
+            req.session.save();
+            res.redirect('/discover');
+        } catch (err) {
+            console.error(err);
+            res.render('login', { message: 'An error occurred. Please try again.' });
+        }
+    });
     
       app.get('/home', (req, res) => {
         res.render('pages/home');
@@ -82,6 +120,7 @@ const hbs = handlebars.create({
       app.get('/routes', (req, res) => {
         res.render('pages/routes');
       });
+
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
