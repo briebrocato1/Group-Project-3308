@@ -63,12 +63,10 @@ const hbs = handlebars.create({
         res.redirect('/home');
       });
 
-    
-      app.get('/register', (req, res) => {
+      app.get('/register', (req,res) => {
         res.render('pages/register');
-      });
-
-      app.post('/register', async (req, res) => {
+    });
+    app.post('/register', async (req, res) => {
         try{
         //hash the password using bcrypt library
         const hash = await bcrypt.hash(req.body.password, 10);
@@ -84,8 +82,8 @@ const hbs = handlebars.create({
             res.redirect('/register?message=Unable to Register')
         }
       });
-
-      app.get('/login', (req, res) => {
+      
+    app.get('/login', (req,res) => {
         res.render('pages/login');
     });
 
@@ -111,19 +109,6 @@ const hbs = handlebars.create({
         }
     });
     
-    // Authentication Middleware.
-    const auth = (req, res, next) => {
-        if (!req.session.user) {
-          // Default to login page.
-          return res.redirect('/login');
-        }
-        next();
-      };
-      
-      // Authentication Required
-    app.use(auth);
-
-    
       app.get('/home', (req, res) => {
         res.render('pages/home');
       });
@@ -135,6 +120,7 @@ const hbs = handlebars.create({
       app.get('/routes', (req, res) => {
         res.render('pages/routes');
       });
+
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
