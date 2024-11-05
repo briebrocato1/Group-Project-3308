@@ -108,18 +108,18 @@ const hbs = handlebars.create({
             res.render('login', { message: 'An error occurred. Please try again.' });
         }
     });
+
+    const auth = (req, res, next) => {
+      if (!req.session.user) {
+        // Default to login page.
+        return res.redirect('/login');
+      }
+      next();
+    };
     
-      app.get('/home', (req, res) => {
-        res.render('pages/home');
-      });
-
-      app.get('/messages', (req, res) => {
-        res.render('pages/messages');
-      });
-
-      app.get('/routes', (req, res) => {
-        res.render('pages/routes');
-      });
+    // Authentication Required
+    app.use(auth);
+    
 
 
 app.listen(3000);
