@@ -1,1 +1,17 @@
+{{> message}}
+<form class="col-lg-6 offset-lg-5" action="/register" method="POST"> 
+    <h1>Register</h1>
+    <div class="form-group w-50">
+        <label for="username">Username</label>
+        <input type="username" name="username" class="form-control" id="username" placeholder="Username"><br>
+    </div>
+
+    <div class="form-group w-50">
+        <label for="password">Password</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="Password"><br>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+    <p>Already have an account? <a class="nav-link" href="/login">Login</a></p>
+</form>
 
