@@ -17,24 +17,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/routes">Routes</a>
                     </li>
+                    {{#if username}}
+                    <li class="nav-item" id="logout-link">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {{else}}
                     <li class="nav-item" id="login-link">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
-                    <li class="nav-item" id="logout-link" style="display: none;">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
+                    {{/if}}
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-
-<script>
-    // Assuming login status is stored in localStorage
-    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-
-    if (isLoggedIn) {
-        document.getElementById('login-link').style.display = 'none';
-        document.getElementById('logout-link').style.display = 'block';
-    }
-</script>

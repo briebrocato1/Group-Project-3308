@@ -39,7 +39,8 @@ const hbs = handlebars.create({
     app.engine('hbs', hbs.engine);
     app.set('view engine', 'hbs');
     app.set('views', path.join(__dirname, 'views'));
-    app.use(bodyParser.json()); 
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname,'resources')));
     
     app.use(
       session({
@@ -59,12 +60,8 @@ const hbs = handlebars.create({
 
     //Routes
 
-    app.get('/home', (req, res) => {
-        res.redirect('pages/home');
-      });
-
       app.get('/register', (req,res) => {
-        res.render('pages/register');
+          res.render('pages/register', {message:req.query.message});
     });
     app.post('/register', async (req, res) => {
         try{
@@ -81,7 +78,7 @@ const hbs = handlebars.create({
 
     }
         catch(err) {
-            res.redirect('/register?message=Unable to Register')
+            res.redirect('/register?message=Unable to Register');
         }
       });
       
@@ -96,11 +93,11 @@ const hbs = handlebars.create({
                 [req.body.username]
             );
             if (!user) {
-                return res.redirect('/register?message=User not found. Please register.');
+                return res.redirect(`/register?message=User not found. Please register.`);
             }
             const match = await bcrypt.compare(req.body.password, user.password);
             if (!match) {
-                return res.render('login', { message: 'Incorrect username or password.' });
+                return res.render('pages/login', { message: `Incorrect username or password.` });
             }
             req.session.user = user;
             req.session.save();
@@ -109,7 +106,7 @@ const hbs = handlebars.create({
 
         } catch (err) {
             console.error(err);
-            res.render('login', { message: 'An error occurred. Please try again.' });
+            res.render('pages/login', { message: `An error occurred. Please try again.` });
         }
     });
 
@@ -122,8 +119,24 @@ const hbs = handlebars.create({
     };
     
     // Authentication Required
-    app.use(auth);
-    
+app.use(auth);
+
+app.get('/home', (req, res) => {
+    res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
+});
+
+app.get('/messageboard', (req, res) => {
+        res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email });
+    });
+
+    app.get('/routes', (req, res) => {
+        res.render('pages/routes', { username: req.session.user.username, email: req.session.user.email });
+    });
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.render('pages/logout', {message:`Logged out successfully!`});
+});
 
 
 app.listen(3000);
