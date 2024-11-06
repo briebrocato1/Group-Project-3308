@@ -112,8 +112,8 @@ app.use(express.static(path.join(__dirname,'resources')));
 
     const auth = (req, res, next) => {
       if (!req.session.user) {
-        // Default to login page.
-        return res.redirect('/login');
+        // Set undefined values so that pages can be rendered without logging in.
+          req.session.user = {username:undefined,email:undefined};
       }
       next();
     };
