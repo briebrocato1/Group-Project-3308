@@ -73,10 +73,12 @@ const hbs = handlebars.create({
       
         // To-DO: Insert username and hashed password into the 'users' table
         await db.none(
+
           `INSERT INTO users(username, email, password) VALUES ($1, $2, $3);`,
           [req.body.username, req.body.email, hash]
       );
         res.redirect('/login')
+
     }
         catch(err) {
             res.redirect('/register?message=Unable to Register')
@@ -102,7 +104,9 @@ const hbs = handlebars.create({
             }
             req.session.user = user;
             req.session.save();
+
             res.redirect('/home');
+
         } catch (err) {
             console.error(err);
             res.render('login', { message: 'An error occurred. Please try again.' });
