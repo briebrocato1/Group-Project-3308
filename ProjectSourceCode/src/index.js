@@ -60,6 +60,10 @@ app.use(express.static(path.join(__dirname,'resources')));
 
     //Routes
 
+    app.get('/welcome', (req, res) => {
+      res.json({status: 'success', message: 'Welcome!'});
+    });
+
       app.get('/register', (req,res) => {
           res.render('pages/register', {message:req.query.message});
     });
@@ -139,5 +143,5 @@ app.get('/logout', (req, res) => {
 });
 
 
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
