@@ -46,7 +46,7 @@ it('Negative : /register. Checking invalid name', done => {
     .post('/register')
     .send({username: 10, email: 10, password: 'fortnite'})
     .end((err, res) => {
-      expect(res).to.have.status(404);
+      expect(res).to.have.status(400);
       done();
     });
 });
