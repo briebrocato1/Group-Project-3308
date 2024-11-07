@@ -60,6 +60,10 @@ app.use(express.static(path.join(__dirname,'resources')));
 
     //Routes
 
+    app.get('/welcome', (req, res) => {
+      res.json({status: 'success', message: 'Welcome!'});
+    });
+
       app.get('/register', (req,res) => {
           res.render('pages/register', {message:req.query.message});
     });
