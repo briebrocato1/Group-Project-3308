@@ -1,0 +1,33 @@
+<header>
+    <nav class="navbar navbar-expand-sm border-bottom">
+        <div class="container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbar-collapse" aria-controls="navbar" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/messageboard">Message Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/routes">Routes</a>
+                    </li>
+                    {{#if username}}
+                    <li class="nav-item" id="logout-link">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {{else}}
+                    <li class="nav-item" id="login-link">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
