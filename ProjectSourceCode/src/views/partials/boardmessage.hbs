@@ -1,0 +1,12 @@
+<div class="message" id="message-{{id}}">
+  <strong>{{author}}:</strong>
+  <p>{{body}}</p>
+
+  {{#if replies}}
+    <div class="replies">
+      {{#each replies}}
+        {{> boardmessage}}
+      {{/each}}
+    </div>
+  {{/if}}
+</div>

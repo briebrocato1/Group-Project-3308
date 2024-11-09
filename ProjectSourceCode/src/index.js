@@ -64,6 +64,10 @@ app.get('/welcome', (req, res) => {
   res.json({ status: 'success', message: 'Welcome!' });
 });
 
+app.get('/', (req, res) => {
+  res.redirect('/home');
+});
+
 app.get('/register', (req, res) => {
   res.render('pages/register', { message: req.query.message });
 });
@@ -137,9 +141,6 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
-app.get('/messageboard', (req, res) => {
-  res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email });
-});
 
 app.get('/routes', (req, res) => {
   res.render('pages/routes', { username: req.session.user.username, email: req.session.user.email });
@@ -148,6 +149,50 @@ app.get('/routes', (req, res) => {
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
+});
+
+// Fetch and organize messages from the database
+async function getMessages() {
+  try {
+    // Query to get all top-level messages and their replies
+    const messages = await db.any(`
+      SELECT id, author, text, parentID
+      FROM messages
+      ORDER BY parentID, id;
+    `);
+    console.log('Fetched messages:', messages);
+    let messageMap = {};
+    let topLevelMessages = [];
+
+    // Organize messages into a map, with replies stored under parent messages
+    messages.forEach(msg => {
+      messageMap[msg.id] = { ...msg, replies: [] };
+    });
+    console.log('Message map:', messageMap);
+    // Create the message tree structure
+    messages.forEach(msg => {
+      if (msg.parentID) {
+        messageMap[msg.parentID].replies.push(messageMap[msg.id]);
+      } else {
+        topLevelMessages.push(messageMap[msg.id]);
+      }
+    });
+    console.log('Top-level messages:', topLevelMessages);
+    return topLevelMessages; // Return the organized messages
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    throw new Error('Error retrieving messages');
+  }
+}
+
+// Define route for displaying messages
+app.get('/messageboard', async (req, res) => {
+  try {
+    const messages = await getMessages(); // Fetch and organize messages
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
 });
 
 

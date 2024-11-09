@@ -31,5 +31,6 @@ CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     author VARCHAR(50) NOT NULL,
     text VARCHAR(2500) NOT NULL,
-    parentID INT
+    parentID INT,
+    FOREIGN KEY (parentID) REFERENCES messages(id)
 );
