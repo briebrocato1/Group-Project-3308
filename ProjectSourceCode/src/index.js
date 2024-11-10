@@ -151,14 +151,13 @@ app.get('/logout', (req, res) => {
   res.render('pages/logout', { message: `Logged out successfully!` });
 });
 
-// Fetch and organize messages from the database
+
 async function getMessages() {
   try {
-    // Query to get all top-level messages and their replies
     const messages = await db.any(`
-      SELECT id, author, text, parentID
+      SELECT id, author, text, parentid
       FROM messages
-      ORDER BY parentID, id;
+      ORDER BY parentid, id;
     `);
     console.log('Fetched messages:', messages);
     let messageMap = {};
@@ -168,21 +167,40 @@ async function getMessages() {
     messages.forEach(msg => {
       messageMap[msg.id] = { ...msg, replies: [] };
     });
-    console.log('Message map:', messageMap);
+    
     // Create the message tree structure
     messages.forEach(msg => {
-      if (msg.parentID) {
-        messageMap[msg.parentID].replies.push(messageMap[msg.id]);
+      if (msg.parentid) {
+
+        messageMap[msg.parentid].replies.push(messageMap[msg.id]);
       } else {
         topLevelMessages.push(messageMap[msg.id]);
       }
     });
+    console.log('Message map:', messageMap);
     console.log('Top-level messages:', topLevelMessages);
-    return topLevelMessages; // Return the organized messages
+    const messagesWithIndentLevels = setIndentLevels(topLevelMessages);
+
+    return messagesWithIndentLevels; // Return the messages with the indent levels set
   } catch (error) {
     console.error('Error fetching messages:', error);
     throw new Error('Error retrieving messages');
   }
+}
+
+// Function to recursively set the indentLevel for each message and its replies
+function setIndentLevels(messages, parentLevel = 0) {
+  return messages.map(msg => {
+    // Set the indentLevel for this message
+    msg.indentLevel = parentLevel;
+
+    // If the message has replies, process each reply recursively
+    if (msg.replies && msg.replies.length > 0) {
+      msg.replies = setIndentLevels(msg.replies, parentLevel + 1); // Increment indentLevel for replies
+    }
+
+    return msg;
+  });
 }
 
 // Define route for displaying messages
