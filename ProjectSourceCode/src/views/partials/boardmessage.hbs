@@ -2,6 +2,15 @@
   <strong>{{author}}:</strong>
   <p>{{text}}</p>
 
+  <button class="add-reply-btn" data-message-id="{{id}}">Add Reply</button>
+
+  <div class="reply-form" id="reply-form-{{id}}" style="display: none;">
+    <form class="replyForm" data-parent-id="{{id}}">
+      <textarea id="reply-text-{{id}}" name="text" placeholder="Write your reply..." required></textarea>
+      <button type="submit">Submit Reply</button>
+    </form>
+  </div>
+
   {{#if replies}}
     <div class="replies">
       {{#each replies}}

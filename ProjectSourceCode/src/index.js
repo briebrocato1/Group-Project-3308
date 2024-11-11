@@ -41,7 +41,6 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'resources')));
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -159,16 +158,13 @@ async function getMessages() {
       FROM messages
       ORDER BY parentid, id;
     `);
-    console.log('Fetched messages:', messages);
     let messageMap = {};
     let topLevelMessages = [];
 
-    // Organize messages into a map, with replies stored under parent messages
     messages.forEach(msg => {
       messageMap[msg.id] = { ...msg, replies: [] };
     });
     
-    // Create the message tree structure
     messages.forEach(msg => {
       if (msg.parentid) {
 
@@ -177,36 +173,72 @@ async function getMessages() {
         topLevelMessages.push(messageMap[msg.id]);
       }
     });
-    console.log('Message map:', messageMap);
-    console.log('Top-level messages:', topLevelMessages);
+
     const messagesWithIndentLevels = setIndentLevels(topLevelMessages);
 
-    return messagesWithIndentLevels; // Return the messages with the indent levels set
+    return messagesWithIndentLevels;
   } catch (error) {
     console.error('Error fetching messages:', error);
     throw new Error('Error retrieving messages');
   }
 }
 
-// Function to recursively set the indentLevel for each message and its replies
 function setIndentLevels(messages, parentLevel = 0) {
   return messages.map(msg => {
-    // Set the indentLevel for this message
+
     msg.indentLevel = parentLevel;
 
-    // If the message has replies, process each reply recursively
     if (msg.replies && msg.replies.length > 0) {
-      msg.replies = setIndentLevels(msg.replies, parentLevel + 1); // Increment indentLevel for replies
+      msg.replies = setIndentLevels(msg.replies, parentLevel + 2);
     }
 
     return msg;
   });
 }
 
+app.post('/messageboard', async (req, res) => {
+  const { author, text } = req.body;
+  try {
+    const newMessage = await db.one(
+      `INSERT INTO messages (author, text, parentid)
+      VALUES ($1, $2, NULL) 
+      RETURNING id, author, text, parentid;`,
+      [author, text]);
+
+    console.log('New message added:', newMessage);
+
+    res.status(200).json({ message: 'Message added successfully' });
+  } catch (error) {
+    console.error('Error adding message:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+app.post('/add-reply', async (req, res) => {
+  const { parentId, text, author } = req.body;
+
+  try {
+
+    const newReply = await db.one(
+      `INSERT INTO messages (author, text, parentid)
+      VALUES ($1, $2, $3) 
+      RETURNING id, author, text, parentid;`,
+      [author, text, parentId]
+    );
+
+    console.log('New reply added:', newReply);
+
+    res.status(200).json({ message: 'Reply added successfully' });
+  } catch (error) {
+    console.error('Error adding reply:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Define route for displaying messages
 app.get('/messageboard', async (req, res) => {
   try {
-    const messages = await getMessages(); // Fetch and organize messages
+    const messages = await getMessages();
     res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
