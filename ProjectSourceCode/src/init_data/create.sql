@@ -16,15 +16,15 @@ CREATE TABLE routes (
     toprope BOOLEAN NOT NULL,
     boulder BOOLEAN NOT NULL,
     snow BOOLEAN NOT NULL,
-    alpine BOOLEAN NOT NULL,
-    firstAscent VARCHAR(255),
+    alpine BOOLEAN,
     description VARCHAR(3000),
     location VARCHAR(500),
-    protection VARCHAR(500),
     areaLongitude DECIMAL(9,6),
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255)
+    firstAscent SET DEFAULT 'Unknown'
 );
+
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
