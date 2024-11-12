@@ -22,7 +22,7 @@ CREATE TABLE routes (
     areaLongitude DECIMAL(9,6),
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255),
-    firstAscent VARCHAR(50) DEFAULT 'Unknown'
+    firstAscent VARCHAR(255) DEFAULT 'Unknown'
 );
 
 
@@ -31,7 +31,8 @@ CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     author VARCHAR(50) NOT NULL,
     text VARCHAR(2500) NOT NULL,
-    parentID INT
+    parentID INT,
+    FOREIGN KEY (parentID) REFERENCES messages(id)
 );
 
 DROP TABLE IF EXISTS reviews;
