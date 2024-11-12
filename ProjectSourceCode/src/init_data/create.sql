@@ -20,10 +20,11 @@ CREATE TABLE routes (
     description VARCHAR(3000),
     location VARCHAR(500),
     areaLongitude DECIMAL(9,6),
-    areaLatitude DECIMAL(9,6), 
-    areaName VARCHAR(255)
-    firstAscent SET DEFAULT 'Unknown'
+    areaLatitude DECIMAL(9,6),
+    areaName VARCHAR(255),
+    firstAscent VARCHAR(255) DEFAULT 'Unknown'
 );
+
 
 
 DROP TABLE IF EXISTS messages;
