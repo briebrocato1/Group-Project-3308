@@ -59,6 +59,9 @@ app.use(
 
 
 //Routes
+app.get('/', (req, res) => {
+  res.redirect('/home');
+});
 
 app.get('/welcome', (req, res) => {
   res.json({ status: 'success', message: 'Welcome!' });
