@@ -1,3 +1,4 @@
+
 INSERT INTO messages (author, text, parentID) VALUES
 -- Top-level messages
 ('Alice', 'This is the first message. It is the start of the conversation.', NULL), -- Message 1
@@ -67,4 +68,5 @@ INSERT INTO messages (author, text, parentID) VALUES
 ('Charlie', 'David, I''m excited to continue the conversation. What''s your take on this?', 28), -- Reply to message 28 (parentID = 28)
 ('Eve', 'Alice, I really enjoy how this conversation is progressing. I''m learning a lot.', 29), -- Reply to message 29 (parentID = 29)
 ('Bob', 'I''m glad to hear that, Eve! Let''s keep it going!', 30); -- Reply to message 30 (parentID = 30)
+
 
