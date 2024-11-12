@@ -235,6 +235,36 @@ app.post('/add-reply', async (req, res) => {
   }
 });
 
+app.post('/delete-message/:id', async (req, res) => {
+  const { id } = req.params;
+  const { hasReplies } = req.body; 
+
+  try {
+    if (hasReplies) {
+
+      await db.none(`
+        UPDATE messages
+        SET author = 'Deleted', text = 'This message has been deleted.'
+        WHERE id = $1;
+      `, [id]);
+
+      console.log('Message marked as deleted:', id);
+      res.status(200).json({ success: true, message: 'Message marked as deleted' });
+    } else {
+
+      await db.none(`
+        DELETE FROM messages WHERE id = $1;
+      `, [id]);
+
+      console.log('Message deleted:', id);
+      res.status(200).json({ success: true, message: 'Message deleted successfully' });
+    }
+  } catch (error) {
+    console.error('Error handling delete:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+});
+
 // Define route for displaying messages
 app.get('/messageboard', async (req, res) => {
   try {

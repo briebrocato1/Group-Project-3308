@@ -88,3 +88,44 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const messageId = event.target.getAttribute('data-message-id');
+        const messageElement = document.getElementById(`message-${messageId}`);
+        const replies = messageElement.querySelector('.replies');
+  
+        const confirmDelete = confirm("Are you sure you want to delete this message?");
+        if (!confirmDelete) return;
+  
+        const hasReplies = replies && replies.children.length > 0;
+  
+        fetch(`/delete-message/${messageId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ hasReplies })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            if (hasReplies) {
+              messageElement.querySelector('strong').textContent = "Deleted";
+              messageElement.querySelector('p').textContent = "This message has been deleted.";
+              event.target.style.display = 'none';
+            } else {
+              messageElement.remove();
+            }
+          } else {
+            alert('Failed to delete the message');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to delete the message');
+        });
+      });
+    });
+  });
