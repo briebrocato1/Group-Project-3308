@@ -41,7 +41,6 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'resources')));
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -59,9 +58,16 @@ app.use(
 
 
 //Routes
+app.get('/', (req, res) => {
+  res.redirect('/home');
+});
 
 app.get('/welcome', (req, res) => {
   res.json({ status: 'success', message: 'Welcome!' });
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/home');
 });
 
 app.get('/register', (req, res) => {
@@ -137,9 +143,6 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
-app.get('/messageboard', (req, res) => {
-  res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email });
-});
 
 app.get('/routes', (req, res) => {
   res.render('pages/routes', { username: req.session.user.username, email: req.session.user.email });
@@ -148,6 +151,131 @@ app.get('/routes', (req, res) => {
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
+});
+
+
+async function getMessages() {
+  try {
+    const messages = await db.any(`
+      SELECT id, author, text, parentid
+      FROM messages
+      ORDER BY parentid, id;
+    `);
+    let messageMap = {};
+    let topLevelMessages = [];
+
+    messages.forEach(msg => {
+      messageMap[msg.id] = { ...msg, replies: [] };
+    });
+    
+    messages.forEach(msg => {
+      if (msg.parentid) {
+
+        messageMap[msg.parentid].replies.push(messageMap[msg.id]);
+      } else {
+        topLevelMessages.push(messageMap[msg.id]);
+      }
+    });
+
+    const messagesWithIndentLevels = setIndentLevels(topLevelMessages);
+
+    return messagesWithIndentLevels;
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    throw new Error('Error retrieving messages');
+  }
+}
+
+function setIndentLevels(messages, parentLevel = 0) {
+  return messages.map(msg => {
+
+    msg.indentLevel = parentLevel;
+
+    if (msg.replies && msg.replies.length > 0) {
+      msg.replies = setIndentLevels(msg.replies, parentLevel + 2);
+    }
+
+    return msg;
+  });
+}
+
+app.post('/messageboard', async (req, res) => {
+  const { author, text } = req.body;
+  try {
+    const newMessage = await db.one(
+      `INSERT INTO messages (author, text, parentid)
+      VALUES ($1, $2, NULL) 
+      RETURNING id, author, text, parentid;`,
+      [author, text]);
+
+    console.log('New message added:', newMessage);
+
+    res.status(200).json({ message: 'Message added successfully' });
+  } catch (error) {
+    console.error('Error adding message:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+app.post('/add-reply', async (req, res) => {
+  const { parentId, text, author } = req.body;
+
+  try {
+
+    const newReply = await db.one(
+      `INSERT INTO messages (author, text, parentid)
+      VALUES ($1, $2, $3) 
+      RETURNING id, author, text, parentid;`,
+      [author, text, parentId]
+    );
+
+    console.log('New reply added:', newReply);
+
+    res.status(200).json({ message: 'Reply added successfully' });
+  } catch (error) {
+    console.error('Error adding reply:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+app.post('/delete-message/:id', async (req, res) => {
+  const { id } = req.params;
+  const { hasReplies } = req.body; 
+
+  try {
+    if (hasReplies) {
+
+      await db.none(`
+        UPDATE messages
+        SET author = 'Deleted', text = 'This message has been deleted.'
+        WHERE id = $1;
+      `, [id]);
+
+      console.log('Message marked as deleted:', id);
+      res.status(200).json({ success: true, message: 'Message marked as deleted' });
+    } else {
+
+      await db.none(`
+        DELETE FROM messages WHERE id = $1;
+      `, [id]);
+
+      console.log('Message deleted:', id);
+      res.status(200).json({ success: true, message: 'Message deleted successfully' });
+    }
+  } catch (error) {
+    console.error('Error handling delete:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+});
+
+// Define route for displaying messages
+app.get('/messageboard', async (req, res) => {
+  try {
+    const messages = await getMessages();
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
 });
 
 
