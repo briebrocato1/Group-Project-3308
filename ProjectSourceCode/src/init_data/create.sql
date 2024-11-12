@@ -21,8 +21,8 @@ CREATE TABLE routes (
     location VARCHAR(500),
     areaLongitude DECIMAL(9,6),
     areaLatitude DECIMAL(9,6), 
-    areaName VARCHAR(255)
-    firstAscent SET DEFAULT 'Unknown'
+    areaName VARCHAR(255),
+    firstAscent VARCHAR(255) DEFAULT 'Unknown'
 );
 
 
