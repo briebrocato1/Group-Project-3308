@@ -1,15 +1,71 @@
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card" id="route-card-{{this.id}}">
-                <h3>{{this.routeName}}</h3>
-                <p><strong>Location:</strong> {{this.areaName}}</p>
-                <p><strong>Difficulty:</strong> {{this.grade}}</p>
-                <p><strong>Safety:</strong> {{this.safety}}</p>
-                <p><strong>Description:</strong> {{this.description}}</p>
-                <img src= "../../resources/img/default_image_for_routes.jpg" alt="Route Image" width="400px">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climbing Routes</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
+            gap: 20px; /* Space between cards */
+            justify-items: center; /* Center align each card */
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            max-width: 300px;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{username}}!</h1>
+        {{#if routes}}
+            <div class="card-container">
+                {{#each routes}}
+                <div class="card" id="route-card-{{this.id}}">
+                    <!-- Route Name -->
+                    <h2>{{this.routeName}}</h2>
+                    
+                    <!-- Route Details -->
+                    <p><strong>Relative Location:</strong> {{this.areaName}} ({{this.location}})</p>
+                    <p><strong>Coordinates:</strong> Lat: {{this.areaLatitude}}, Long: {{this.areaLongitude}}</p>
+                    <p><strong>Difficulty:</strong> {{this.grade}}</p>
+                    <p><strong>Safety:</strong> {{this.safety}}</p>
+                    
+                    <!-- Route Types -->
+                    <p><strong>Types:</strong> 
+                        {{#if this.sport}}Sport{{/if}} 
+                        {{#if this.trad}}Trad{{/if}} 
+                        {{#if this.toprope}}Top Rope{{/if}} 
+                        {{#if this.boulder}}Boulder{{/if}} 
+                        {{#if this.snow}}Snow{{/if}} 
+                        {{#if this.alpine}}Alpine{{/if}}
+                    </p>
+                    
+                    <!-- Route Description -->
+                    <p><strong>Description:</strong> {{this.description}}</p>
+                    
+                </div>
+                {{/each}}
             </div>
-        </div>
-        <br>
+        {{else}}
+            <p>No routes available</p>
+        {{/if}}
     </div>
-</div>
+</body>
+</html>
