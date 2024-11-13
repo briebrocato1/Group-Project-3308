@@ -1,5 +1,5 @@
 /* messageboard.css */
-h1 {
+#messageHead {
     color: #333;
     text-align: center;
     margin-bottom: 20px;
@@ -47,6 +47,15 @@ textarea {
     border: 1px solid #ccc;
 }
 
-button {
-    margin: 5px;
+.header-image {
+    text-align: center;
+    margin-bottom: 20px;
 }
+
+.header-img {
+    width: 100%;
+    max-height: 250px; /* Adjust as needed */
+    object-fit: cover; /* Ensures the image covers the space without distortion */
+}
+
+
