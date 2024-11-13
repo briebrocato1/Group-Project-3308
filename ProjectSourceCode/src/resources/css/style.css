@@ -1,8 +1,28 @@
 /* messageboard.css */
-#messageHead {
+/* #messageHead {
     color: #333;
     text-align: center;
     margin-bottom: 20px;
+} */
+
+.header-image {
+    position: relative;
+    text-align: center;
+    background-image: url('/img/trees.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 250px; /* Adjust as needed */
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.7);
+}
+
+#messageHead {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; /* Change as needed for contrast */
+    font-size: 2.5em; /* Adjust size as necessary */
+    margin: 0;
 }
 
 #messageModal {
