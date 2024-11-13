@@ -18,7 +18,7 @@ CREATE TABLE routes (
     snow BOOLEAN NOT NULL,
     alpine BOOLEAN,
     description VARCHAR(3000),
-    location VARCHAR(500),
+    location VARCHAR(3000),
     areaLongitude DECIMAL(9,6),
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255),
