@@ -145,9 +145,22 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
+app.get('/routes', async (req, res) => {
+  try {
+    // Fetch all routes from the database
+    const routes = await db.any('SELECT * FROM routes');
+    console.log('Fetched routes:', routes); // Log the fetched data to the console
 
-app.get('/routes', (req, res) => {
-  res.render('pages/routes', { username: req.session.user.username, email: req.session.user.email });
+    // Render the routes page with the retrieved data
+    res.render('pages/routes', {
+      username: req.session.user.username,
+      email: req.session.user.email,
+      routes: routes,
+    });
+  } catch (error) {
+    console.error('Error fetching routes:', error.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 app.get('/logout', (req, res) => {
@@ -282,7 +295,6 @@ app.get('/messageboard', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
