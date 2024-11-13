@@ -1,0 +1,30 @@
+<div class="message" id="message-{{id}}" style="margin-left: {{indentLevel}}em;">
+    <strong>{{author}}:</strong>
+    <p>{{text}}</p>
+
+    {{#if username}}
+    <button class="add-reply-btn" data-message-id="{{id}}">Add Reply</button>
+    {{else}}
+    <button class="add-reply-btn" data-message-id="{{id}}" disabled>Add Reply</button>
+    {{/if}}
+
+    {{#ifeq username author}}
+    <button class="delete-btn" data-message-id="{{id}}">Delete</button>
+    {{else}}
+    <button class="delete-btn" data-message-id="{{id}}" disabled>Delete</button>
+    {{/ifeq}}
+    <div class="reply-form" id="reply-form-{{id}}" style="display: none;">
+        <form class="replyForm" data-parent-id="{{id}}">
+            <textarea id="reply-text-{{id}}" name="text" placeholder="Write your reply..." required></textarea>
+            <button type="submit">Submit Reply</button>
+        </form>
+    </div>
+
+    {{#if replies}}
+    <div class="replies">
+        {{#each replies}}
+        {{> boardmessage}}
+        {{/each}}
+    </div>
+    {{/if}}
+</div>
