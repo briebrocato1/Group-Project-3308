@@ -1,25 +1,29 @@
 <h1>Message Board</h1>
 
+{{#if username}}
 <button id="openModalBtn">Add Message</button>
+{{else}}
+<button id="openModalBtn" disabled>Add Message</button>
+{{/if}}
 
 <div id="messageModal" style="display: none;">
-  <div class="modal-content">
-    <h2>Post a New Message</h2>
-    <form id="messageForm">
-      <label for="author">Author:</label>
-      <input type="text" id="author" name="author" value="{{username}}" readonly />
-      
-      <label for="text">Message:</label>
-      <textarea id="text" name="text" required></textarea>
-      
-      <button type="submit">Submit</button>
-      <button type="button" id="closeModalBtn">Cancel</button>
-    </form>
-  </div>
+    <div class="modal-content">
+        <h2>Post a New Message</h2>
+        <form id="messageForm">
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" value="{{username}}" readonly />
+
+            <label for="text">Message:</label>
+            <textarea id="text" name="text" required></textarea>
+
+            <button type="submit">Submit</button>
+            <button type="button" id="closeModalBtn">Cancel</button>
+        </form>
+    </div>
 </div>
 
 {{#each boardmessages}}
-  {{> boardmessage}}
+{{> boardmessage}}
 {{/each}}
 
 <script src="/js/script.js"></script> 

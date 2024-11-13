@@ -35,3 +35,12 @@ CREATE TABLE messages (
     parentID INT,
     FOREIGN KEY (parentID) REFERENCES messages(id)
 );
+
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    author VARCHAR(50) NOT NULL,
+    body VARCHAR(2500) NOT NULL,
+    route_id INT NOT NULL,
+    CONSTRAINT route_id FOREIGN KEY (route_id) REFERENCES routes(id)
+);
