@@ -17,6 +17,8 @@ const hbs = handlebars.create({
   partialsDir: __dirname + '/views/partials',
 });
 
+Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
+
 const dbConfig = {
   host: 'db',
   port: 5432,
@@ -154,7 +156,7 @@ app.get('/logout', (req, res) => {
 });
 
 
-async function getMessages() {
+async function getMessages(user) {
   try {
     const messages = await db.any(`
       SELECT id, author, text, parentid
@@ -165,7 +167,7 @@ async function getMessages() {
     let topLevelMessages = [];
 
     messages.forEach(msg => {
-      messageMap[msg.id] = { ...msg, replies: [] };
+        messageMap[msg.id] = { ...msg, replies: [], username: user };
     });
     
     messages.forEach(msg => {
@@ -271,7 +273,7 @@ app.post('/delete-message/:id', async (req, res) => {
 // Define route for displaying messages
 app.get('/messageboard', async (req, res) => {
   try {
-    const messages = await getMessages();
+    const messages = await getMessages(req.session.user.username);
     res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
