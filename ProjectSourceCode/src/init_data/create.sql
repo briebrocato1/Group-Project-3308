@@ -26,6 +26,7 @@ CREATE TABLE routes (
 );
 
 
+
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
