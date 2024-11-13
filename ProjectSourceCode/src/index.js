@@ -217,6 +217,9 @@ function setIndentLevels(messages, parentLevel = 0) {
 app.post('/messageboard', async (req, res) => {
   const { author, text } = req.body;
   try {
+    res.render('pages/messageboard', {
+      isMessageBoard: true 
+    });
     const newMessage = await db.one(
       `INSERT INTO messages (author, text, parentid)
       VALUES ($1, $2, NULL) 
