@@ -17,6 +17,7 @@ const hbs = handlebars.create({
   partialsDir: __dirname + '/views/partials',
 });
 
+// Registering handlebars helper to check equality of two variables with handlebars
 Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
 
 const dbConfig = {
@@ -31,7 +32,7 @@ const db = pgp(dbConfig);
 
 db.connect()
   .then(obj => {
-    console.log('Database connection successful');
+      console.log('Database connection successful');
     obj.done();
   })
   .catch(error => {
@@ -57,7 +58,20 @@ app.use(
   })
 );
 
+async function insertadmin() {
+    try {
+        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
+        if (!admin) {
+            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
+            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
+insertadmin();
 
 //Routes
 app.get('/', (req, res) => {
@@ -217,9 +231,6 @@ function setIndentLevels(messages, parentLevel = 0) {
 app.post('/messageboard', async (req, res) => {
   const { author, text } = req.body;
   try {
-    res.render('pages/messageboard', {
-      isMessageBoard: true 
-    });
     const newMessage = await db.one(
       `INSERT INTO messages (author, text, parentid)
       VALUES ($1, $2, NULL) 
@@ -228,7 +239,7 @@ app.post('/messageboard', async (req, res) => {
 
     console.log('New message added:', newMessage);
 
-    res.status(200).json({ message: 'Message added successfully' });
+      res.status(200).json({ message: 'Message added successfully'});
   } catch (error) {
     console.error('Error adding message:', error);
     res.status(500).send('Server Error');
@@ -290,7 +301,7 @@ app.post('/delete-message/:id', async (req, res) => {
 app.get('/messageboard', async (req, res) => {
   try {
     const messages = await getMessages(req.session.user.username);
-    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages,isMessageBoard:true }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
   }
