@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const handlebars = require('express-handlebars');
@@ -147,6 +146,8 @@ app.get('/home', (req, res) => {
 
 app.get('/routes', async (req, res) => {
   try {
+    // Fetch all routes from the database
+    const routes = await db.any('SELECT * FROM routes');
     // Fetch all routes, including the average rating (will be null if there are no reviews)
     const routes = await db.any(`
       SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent, rating 
@@ -154,6 +155,7 @@ app.get('/routes', async (req, res) => {
     `);
     console.log('Fetched routes:', routes); // Log the fetched data to the console
 
+    // Render the routes page with the retrieved data
     // Render the routes page with the retrieved data, including rating information
     res.render('pages/routes', {
       username: req.session.user.username,
@@ -165,38 +167,6 @@ app.get('/routes', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
-// Add Route - GET route (requires login)
-// index.js
-
-// Example middleware to check if the user is authenticated
-function requireAuth(req, res, next) {
-  if (!req.session || !req.session.user) {
-    return res.redirect('/login');
-  }
-  next();
-}
-
-// Use it in routes where authentication is required
-app.post('/add-route', requireAuth, async (req, res) => {
-  const { routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine } = req.body;
-  try {
-    const newRoute = await db.one(
-      `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine;`,
-      [routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine]
-    );
-
-    console.log('New route added:', newRoute);
-    res.status(200).json({ message: 'Route added successfully', route: newRoute });
-  } catch (error) {
-    console.error('Error adding route:', error);
-    res.status(500).send('Server Error');
-  }
-});
-
-
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
@@ -217,7 +187,7 @@ async function getMessages(user) {
     messages.forEach(msg => {
         messageMap[msg.id] = { ...msg, replies: [], username: user };
     });
-    
+
     messages.forEach(msg => {
       if (msg.parentid) {
 
