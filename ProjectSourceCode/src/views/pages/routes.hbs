@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +13,11 @@
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* Responsive layout for up to 3 columns */
             gap: 20px;
+            /* Space between cards */
             justify-items: center;
+            /* Center align each card */
         }
 
         .card {
@@ -41,28 +45,31 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             width: 400px;
         }
+
         .close-btn {
             float: right;
             cursor: pointer;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Welcome, {{username}}!</h1>
 
         <!-- Conditionally show "Add New Route" button if the user is logged in -->
         {{#if username}}
-            <button onclick="openModal()">Add New Route</button>
+        <button onclick="openModal()">Add New Route</button>
         {{else}}
-            <!-- Redirect to login page if the user is not logged in -->
-            <a href="/login"><button>Add New Route</button></a>
+        <!-- Redirect to login page if the user is not logged in -->
+        <a href="/login"><button>Add New Route</button></a>
         {{/if}}
 
         <!-- Popup Modal -->
@@ -113,18 +120,28 @@
 
         <div class="card-container">
             {{#if routes}}
-                {{#each routes}}
-                <div class="card">
-                    <h2>{{this.routename}}</h2>
-                    <p><strong>Location:</strong> {{this.areaName}} {{this.location}}</p>
-                    <p><strong>Grade:</strong> {{this.grade}}</p>
-                    <p><strong>Safety:</strong> {{this.safety}}</p>
-                    <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
-                    <p><strong>Description:</strong> {{this.description}}</p>
-                </div>
-                {{/each}}
+            {{#each routes}}
+            <div class="card">
+                <h2>{{this.routename}}</h2>
+
+                <p><strong>Rating:</strong>
+                    {{#if this.rating}}
+                    {{this.rating}}
+                    {{else}}
+                    Unrated
+                    {{/if}}
+                </p>
+
+
+                <p><strong>Location:</strong> {{this.areaName}} {{this.location}}</p>
+                <p><strong>Grade:</strong> {{this.grade}}</p>
+                <p><strong>Safety:</strong> {{this.safety}}</p>
+                <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+                <p><strong>Description:</strong> {{this.description}}</p>
+            </div>
+            {{/each}}
             {{else}}
-                <p>No routes available</p>
+            <p>No routes available</p>
             {{/if}}
         </div>
     </div>
@@ -139,4 +156,5 @@
         }
     </script>
 </body>
+
 </html>
