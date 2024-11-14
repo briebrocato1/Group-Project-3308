@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +12,12 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
-            gap: 20px; /* Space between cards */
-            justify-items: center; /* Center align each card */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* Responsive layout for up to 3 columns */
+            gap: 20px;
+            /* Space between cards */
+            justify-items: center;
+            /* Center align each card */
         }
 
         .card {
@@ -31,43 +35,51 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Welcome, {{username}}!</h1>
         {{#if routes}}
-            <div class="card-container">
-                {{#each routes}}
-                <div class="card" id="route-card-{{this.id}}">
-                    <!-- Route Name -->
-                    <h2>{{this.routeName}}</h2>
-                    
-                    <!-- Route Details -->
-                    <p><strong>Relative Location:</strong> {{this.areaName}} {{this.location}}</p>
-                    <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
-                    <p><strong>Difficulty:</strong> {{this.grade}}</p>
-                    <p><strong>Safety:</strong> {{this.safety}}</p>
-                    <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+        <div class="card-container">
+            {{#each routes}}
+            <div class="card" id="route-card-{{this.id}}">
+                <!-- Route Name -->
+                <h2>{{this.routename}}</h2>
 
-                    
-                    <!-- Route Types -->
-                    <p><strong>Types:</strong> 
-                        {{#if this.sport}}Sport{{/if}} 
-                        {{#if this.trad}}Trad{{/if}} 
-                        {{#if this.toprope}}Top Rope{{/if}} 
-                        {{#if this.boulder}}Boulder{{/if}} 
-                        {{#if this.snow}}Snow{{/if}} 
-                        {{#if this.alpine}}Alpine{{/if}}
-                    </p>
-                    
-                    <!-- Route Description -->
-                    <p><strong>Description:</strong> {{this.description}}</p>
-                    
-                </div>
-                {{/each}}
+                <!-- Route Details -->
+                <p><strong>Rating:</strong>
+                    {{#if this.rating}}
+                    {{this.rating}}
+                    {{else}}
+                    Unrated
+                    {{/if}}
+                </p>
+                <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
+                <p><strong>Difficulty:</strong> {{this.grade}}</p>
+                <p><strong>Safety:</strong> {{this.safety}}</p>
+                <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+
+
+                <!-- Route Types -->
+                <p><strong>Types:</strong>
+                    {{#if this.sport}}Sport{{/if}}
+                    {{#if this.trad}}Trad{{/if}}
+                    {{#if this.toprope}}Top Rope{{/if}}
+                    {{#if this.boulder}}Boulder{{/if}}
+                    {{#if this.snow}}Snow{{/if}}
+                    {{#if this.alpine}}Alpine{{/if}}
+                </p>
+
+                <!-- Route Description -->
+
+
             </div>
+            {{/each}}
+        </div>
         {{else}}
-            <p>No routes available</p>
+        <p>No routes available</p>
         {{/if}}
     </div>
 </body>
+
 </html>
