@@ -166,6 +166,38 @@ app.get('/routes', async (req, res) => {
   }
 });
 
+// Add Route - GET route (requires login)
+// index.js
+
+// Example middleware to check if the user is authenticated
+function requireAuth(req, res, next) {
+  if (!req.session || !req.session.user) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
+// Use it in routes where authentication is required
+app.post('/add-route', requireAuth, async (req, res) => {
+  const { routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine } = req.body;
+  try {
+    const newRoute = await db.one(
+      `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      RETURNING routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine;`,
+      [routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine]
+    );
+
+    console.log('New route added:', newRoute);
+    res.status(200).json({ message: 'Route added successfully', route: newRoute });
+  } catch (error) {
+    console.error('Error adding route:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
