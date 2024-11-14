@@ -163,6 +163,40 @@ app.get('/routes', async (req, res) => {
   }
 });
 
+// Add Route - GET route (requires login)
+app.get('/add-route', requireAuth, (req, res) => {
+  res.render('pages/add-route', { username: req.session.user.username });
+});
+
+// Add Route - POST route (requires login)
+app.post('/add-route', async (req, res) => {
+  const { routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine } = req.body;
+  
+  try {
+    // Add new route to the database
+    const newRoute = await db.one(
+      `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      RETURNING routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine;`,
+      [routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine]
+    );
+
+    console.log('New route added:', newRoute);
+
+    // Optionally, append the new route to routes_insert.sql if required
+    fs.appendFileSync('routes_insert.sql', `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine) 
+      VALUES ('${routeName}', '${grade}', '${safety}', '${description}', '${firstAscent}', '${location}', ${areaLatitude}, ${areaLongitude}, '${areaName}', ${sport}, ${trad}, ${toprope}, ${boulder}, ${snow}, ${alpine});\n`);
+
+    // Respond with the new route data
+    res.status(200).json({ message: 'Route added successfully', route: newRoute });
+  } catch (error) {
+    console.error('Error adding route:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });

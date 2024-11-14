@@ -11,9 +11,9 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
-            gap: 20px; /* Space between cards */
-            justify-items: center; /* Center align each card */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-items: center;
         }
 
         .card {
@@ -21,7 +21,6 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
-            box-sizing: border-box;
             max-width: 300px;
         }
 
@@ -29,45 +28,115 @@
             width: 100%;
             border-radius: 5px;
         }
+
+        /* Popup styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+        }
+        .close-btn {
+            float: right;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome, {{username}}!</h1>
-        {{#if routes}}
-            <div class="card-container">
+
+        <!-- Conditionally show "Add New Route" button if the user is logged in -->
+        {{#if username}}
+            <button onclick="openModal()">Add New Route</button>
+        {{else}}
+            <!-- Redirect to login page if the user is not logged in -->
+            <a href="/login"><button>Add New Route</button></a>
+        {{/if}}
+
+        <!-- Popup Modal -->
+        <div id="addRouteModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">×</span>
+                <h2>Add a New Route</h2>
+                <form id="addRouteForm" method="POST" action="/add-route">
+                    <label>Route Name:</label>
+                    <input type="text" name="routeName" required><br>
+
+                    <label>Grade:</label>
+                    <input type="text" name="grade"><br>
+
+                    <label>Safety:</label>
+                    <input type="text" name="safety"><br>
+
+                    <label>Description:</label>
+                    <textarea name="description"></textarea><br>
+
+                    <label>First Ascent:</label>
+                    <input type="text" name="firstAscent"><br>
+
+                    <label>Location:</label>
+                    <input type="text" name="location"><br>
+
+                    <label>Latitude:</label>
+                    <input type="number" step="0.000001" name="areaLatitude"><br>
+
+                    <label>Longitude:</label>
+                    <input type="number" step="0.000001" name="areaLongitude"><br>
+
+                    <label>Area Name:</label>
+                    <input type="text" name="areaName"><br>
+
+                    <label>Types:</label><br>
+                    <input type="checkbox" name="sport"> Sport<br>
+                    <input type="checkbox" name="trad"> Trad<br>
+                    <input type="checkbox" name="toprope"> Top Rope<br>
+                    <input type="checkbox" name="boulder"> Boulder<br>
+                    <input type="checkbox" name="snow"> Snow<br>
+                    <input type="checkbox" name="alpine"> Alpine<br>
+
+                    <button type="submit">Add Route</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card-container">
+            {{#if routes}}
                 {{#each routes}}
-                <div class="card" id="route-card-{{this.id}}">
-                    <!-- Route Name -->
-                    <h2>{{this.routeName}}</h2>
-                    
-                    <!-- Route Details -->
-                    <p><strong>Relative Location:</strong> {{this.areaName}} {{this.location}}</p>
-                    <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
-                    <p><strong>Difficulty:</strong> {{this.grade}}</p>
+                <div class="card">
+                    <h2>{{this.routename}}</h2>
+                    <p><strong>Location:</strong> {{this.areaName}} {{this.location}}</p>
+                    <p><strong>Grade:</strong> {{this.grade}}</p>
                     <p><strong>Safety:</strong> {{this.safety}}</p>
                     <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
-
-                    
-                    <!-- Route Types -->
-                    <p><strong>Types:</strong> 
-                        {{#if this.sport}}Sport{{/if}} 
-                        {{#if this.trad}}Trad{{/if}} 
-                        {{#if this.toprope}}Top Rope{{/if}} 
-                        {{#if this.boulder}}Boulder{{/if}} 
-                        {{#if this.snow}}Snow{{/if}} 
-                        {{#if this.alpine}}Alpine{{/if}}
-                    </p>
-                    
-                    <!-- Route Description -->
                     <p><strong>Description:</strong> {{this.description}}</p>
-                    
                 </div>
                 {{/each}}
-            </div>
-        {{else}}
-            <p>No routes available</p>
-        {{/if}}
+            {{else}}
+                <p>No routes available</p>
+            {{/if}}
+        </div>
     </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('addRouteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addRouteModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
