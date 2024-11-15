@@ -129,3 +129,44 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+document.getElementById('filterModalButton').addEventListener('click', () => {
+    document.getElementById('filterModal').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+});
+
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('filterModal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+});
+
+document.getElementById('applyFilters').addEventListener('click', () => {
+    const formData = new FormData(document.getElementById('filterForm'));
+    const queryParams = new URLSearchParams(formData).toString();
+    window.location.href = `/routes?${queryParams}`;
+});
+
+document.getElementById('typeDropdownButton').addEventListener('click', () => {
+  const menu = document.getElementById('typeDropdownMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+});
+
+window.addEventListener('click', (event) => {
+  if (!event.target.matches('#typeDropdownButton')) {
+      document.getElementById('typeDropdownMenu').style.display = 'none';
+  }
+});
+
+document.getElementById('applyFilters').addEventListener('click', () => {
+  const formData = new FormData(document.getElementById('filterForm'));
+
+  // Collect checked types
+  const checkedTypes = Array.from(document.querySelectorAll('#typeDropdownMenu input:checked'))
+      .map(input => input.value)
+      .join(',');
+
+  formData.set('types', checkedTypes); // Add types as a single comma-separated value
+
+  const queryParams = new URLSearchParams(formData).toString();
+  window.location.href = `/routes?${queryParams}`;
+});
