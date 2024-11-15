@@ -1,3 +1,4 @@
+
 <div class="message" id="message-{{id}}" style="margin-left: {{indentLevel}}em;">
     <strong>{{author}}:</strong>
     <p>{{text}}</p>
@@ -20,11 +21,15 @@
         </form>
     </div>
 
-    {{#if replies}}
+     {{#if replies}}
     <div class="replies">
         {{#each replies}}
-        {{> boardmessage}}
+        <div class="message-container">
+            {{> boardmessage}}
+        </div>
         {{/each}}
     </div>
     {{/if}}
+
+    
 </div>
