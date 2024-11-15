@@ -143,9 +143,8 @@ app.get('/home', (req, res) => {
 
 app.get('/routes', async (req, res) => {
   try {
-    // Fetch all routes, including the average rating (will be null if there are no reviews)
     const routes = await db.any(`
-      SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent, rating 
+      SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent
       FROM routes
     `);
     console.log('Fetched routes:', routes); // Log the fetched data to the console
