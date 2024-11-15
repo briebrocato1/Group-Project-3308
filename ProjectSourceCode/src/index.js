@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const handlebars = require('express-handlebars');
@@ -149,9 +148,15 @@ app.get('/routes', async (req, res) => {
   try {
     // Fetch all routes from the database
     const routes = await db.any('SELECT * FROM routes');
+    // Fetch all routes, including the average rating (will be null if there are no reviews)
+    const routes = await db.any(`
+      SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent, rating 
+      FROM routes
+    `);
     console.log('Fetched routes:', routes); // Log the fetched data to the console
 
     // Render the routes page with the retrieved data
+    // Render the routes page with the retrieved data, including rating information
     res.render('pages/routes', {
       username: req.session.user.username,
       email: req.session.user.email,
@@ -182,7 +187,7 @@ async function getMessages(user) {
     messages.forEach(msg => {
         messageMap[msg.id] = { ...msg, replies: [], username: user };
     });
-    
+
     messages.forEach(msg => {
       if (msg.parentid) {
 
