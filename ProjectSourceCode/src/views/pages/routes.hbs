@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-@@ -11,9 +12,12 @@
+    <title>Climbing Routes</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
             gap: 20px; /* Space between cards */
             justify-items: center; /* Center align each card */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            /* Responsive layout for up to 3 columns */
-            gap: 20px;
-            /* Space between cards */
-            justify-items: center;
-            /* Center align each card */
         }
+
         .card {
-@@ -31,43 +35,51 @@
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            max-width: 300px;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -25,20 +35,56 @@
     <div class="container">
         {{#if username}}
         <h1>Welcome, {{username}}!</h1>
-<<<<<<< HEAD
-<<<<<<< HEAD
         {{else}}
         <h1>Welcome!</h1>
         {{/if}}
+        <button id="filterModalButton">Filter</button>
+        <div id="filterModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:400px; background-color:white; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,0.2); border-radius:8px; z-index:1000;">
+            <form id="filterForm">
+                <label for="name">Route Name:</label>
+                <input type="text" id="filterName" name="name"><br><br>
+                <label for="grade">Grade:</label>
+                <input type="text" id="filterGrade" name="grade"><br><br>
+                <label for="safety">Safety:</label>
+                <input type="text" id="filterSafety" name="safety"><br><br>
+                <label for="types">Route Types:</label>
+                <div id="typeDropdown" style="position: relative;">
+                    <button type="button" id="typeDropdownButton">Select Types</button>
+                    <div id="typeDropdownMenu" style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; z-index: 1000;">
+                        <label><input type="checkbox" name="types" value="sport"> Sport</label><br>
+                        <label><input type="checkbox" name="types" value="trad"> Trad</label><br>
+                        <label><input type="checkbox" name="types" value="toprope"> Toprope</label><br>
+                        <label><input type="checkbox" name="types" value="boulder"> Boulder</label><br>
+                        <label><input type="checkbox" name="types" value="snow"> Snow</label><br>
+                        <label><input type="checkbox" name="types" value="alpine"> Alpine</label>
+                    </div>
+                </div>
+                <br>
+                <label for="areaname">Area Name:</label>
+                <input type="text" id="filterAreaName" name="areaname"><br><br>
+                <label for="firstascent">First Ascent:</label>
+                <input type="text" id="filterFirstAscent" name="firstascent"><br><br>
+                <button type="button" id="applyFilters">Apply</button>
+                <button type="button" id="closeModal">Close</button>
+            </form>
+        </div>
         {{#if routes}}
         <div class="card-container">
             {{#each routes}}
             <div class="card" id="route-card-{{this.id}}">
                 <!-- Route Name -->
-                <h2>{{this.routeName}}</h2>
+                <h2>{{this.routename}}</h2>
 
                 <!-- Route Details -->
-                <p><strong>Relative Location:</strong> {{this.areaName}} {{this.location}}</p>
+                <p>
+                    <strong>Rating:</strong>
+                    {{#if this.rating}}
+                    {{this.rating}}
+                    {{else}}
+                    Unrated
+                    {{/if}}
+                </p>
+                <p><strong>Relative Location:</strong> {{this.areaname}} {{this.location}}</p>
                 <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
                 <p><strong>Difficulty:</strong> {{this.grade}}</p>
                 <p><strong>Safety:</strong> {{this.safety}}</p>
@@ -63,112 +109,10 @@
             {{/each}}
         </div>
         {{else}}
-=======
-=======
-        <button id="filterModalButton">Filter</button>
-        <div id="filterModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:400px; background-color:white; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,0.2); border-radius:8px; z-index:1000;">
-    <form id="filterForm">
-        <label for="name">Route Name:</label>
-        <input type="text" id="filterName" name="name"><br><br>
-
-        <label for="grade">Grade:</label>
-        <input type="text" id="filterGrade" name="grade"><br><br>
-
-        <label for="safety">Safety:</label>
-        <input type="text" id="filterSafety" name="safety"><br><br>
-
-        <label for="types">Route Types:</label>
-        <div id="typeDropdown" style="position: relative;">
-            <button type="button" id="typeDropdownButton">Select Types</button>
-            <div id="typeDropdownMenu" style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; z-index: 1000;">
-                <label><input type="checkbox" name="types" value="sport"> Sport</label><br>
-                <label><input type="checkbox" name="types" value="trad"> Trad</label><br>
-                <label><input type="checkbox" name="types" value="toprope"> Toprope</label><br>
-                <label><input type="checkbox" name="types" value="boulder"> Boulder</label><br>
-                <label><input type="checkbox" name="types" value="snow"> Snow</label><br>
-                <label><input type="checkbox" name="types" value="alpine"> Alpine</label>
-            </div>
-        </div>
-        <br>
-
-        <label for="areaname">Area Name:</label>
-        <input type="text" id="filterAreaName" name="areaname"><br><br>
-
-        <label for="firstascent">First Ascent:</label>
-        <input type="text" id="filterFirstAscent" name="firstascent"><br><br>
-
-        <button type="button" id="applyFilters">Apply</button>
-        <button type="button" id="closeModal">Close</button>
-    </form>
-</div>
->>>>>>> main
-        {{#if routes}}
-            <div class="card-container">
-                {{#each routes}}
-                <div class="card" id="route-card-{{this.id}}">
-                    <!-- Route Name -->
-                    <h2>{{this.routename}}</h2>
-                    
-                    <!-- Route Details -->
-                    <p><strong>Relative Location:</strong> {{this.areaname}} {{this.location}}</p>
-                    <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
-                    <p><strong>Difficulty:</strong> {{this.grade}}</p>
-                    <p><strong>Safety:</strong> {{this.safety}}</p>
-                    <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
-        <div class="card-container">
-            {{#each routes}}
-            <div class="card" id="route-card-{{this.id}}">
-                <!-- Route Name -->
-                <h2>{{this.routename}}</h2>
-                <!-- Route Details -->
-                <p><strong>Rating:</strong>
-                    {{#if this.rating}}
-                    {{this.rating}}
-                    {{else}}
-                    Unrated
-                    {{/if}}
-                </p>
-                <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
-                <p><strong>Difficulty:</strong> {{this.grade}}</p>
-                <p><strong>Safety:</strong> {{this.safety}}</p>
-                <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
-                <!-- Route Types -->
-                <p><strong>Types:</strong>
-                    {{#if this.sport}}Sport{{/if}}
-                    {{#if this.trad}}Trad{{/if}}
-                    {{#if this.toprope}}Top Rope{{/if}}
-                    {{#if this.boulder}}Boulder{{/if}}
-                    {{#if this.snow}}Snow{{/if}}
-                    {{#if this.alpine}}Alpine{{/if}}
-                </p>
-                <!-- Route Description -->
-
-                    
-                    <!-- Route Types -->
-                    <p><strong>Types:</strong> 
-                        {{#if this.sport}}Sport{{/if}} 
-                        {{#if this.trad}}Trad{{/if}} 
-                        {{#if this.toprope}}Top Rope{{/if}} 
-                        {{#if this.boulder}}Boulder{{/if}} 
-                        {{#if this.snow}}Snow{{/if}} 
-                        {{#if this.alpine}}Alpine{{/if}}
-                    </p>
-                    
-                    <!-- Route Description -->
-                    <p><strong>Description:</strong> {{this.description}}</p>
-                    
-                </div>
-                {{/each}}
-            </div>
-            {{/each}}
-        </div>
-        {{else}}
-            <p>No routes available</p>
->>>>>>> main
         <p>No routes available</p>
         {{/if}}
     </div>
-    <script src="/js/script.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>
 
