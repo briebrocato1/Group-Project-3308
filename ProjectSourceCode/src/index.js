@@ -157,24 +157,48 @@ app.get('/home', (req, res) => {
 
 app.get('/routes', async (req, res) => {
   try {
-    const routes = await db.any(`
-      SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent
-      FROM routes
-    `);
-    console.log('Fetched routes:', routes); // Log the fetched data to the console
+      const { name, grade, safety, types, firstascent, areaname } = req.query;
 
-    // Render the routes page with the retrieved data, including rating information
-    res.render('pages/routes', {
-      username: req.session.user.username,
-      email: req.session.user.email,
-      routes: routes,
-    });
+      let query = 'SELECT * FROM routes WHERE 1=1';
+      const values = [];
+
+      if (name) {
+          query += ' AND routeName ILIKE $1';
+          values.push(`%${name}%`);
+      }
+      if (grade) {
+          query += ` AND grade = $${values.length + 1}`;
+          values.push(grade);
+      }
+      if (safety) {
+          query += ` AND safety = $${values.length + 1}`;
+          values.push(safety);
+      }
+      if (firstascent) {
+          query += ` AND firstAscent ILIKE $${values.length + 1}`;
+          values.push(`%${firstascent}%`);
+      }
+      if (areaname) {
+          query += ` AND areaName ILIKE $${values.length + 1}`;
+          values.push(`%${areaname}%`);
+      }
+      if (types) {
+          const typeFilters = types.split(',').map(type => `${type} = true`);
+          query += ` AND (${typeFilters.join(' OR ')})`;
+      }
+
+      const routes = await db.any(query, values);
+
+      res.render('pages/routes', {
+          username: req.session.user.username,
+          email: req.session.user.email,
+          routes: routes,
+      });
   } catch (error) {
-    console.error('Error fetching routes:', error.message);
-    res.status(500).send('Server Error');
+      console.error('Error fetching routes:', error.message);
+      res.status(500).send('Server Error');
   }
 });
-
 
 // Add Route - GET route (requires login)
 // index.js
