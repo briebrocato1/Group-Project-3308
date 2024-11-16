@@ -190,6 +190,16 @@
                 <p><strong>Location:</strong> {{this.areaname}} {{this.location}}</p>
                 <p><strong>Grade:</strong> {{this.grade}}</p>
                 <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+                <!-- Route Types -->
+                <p>
+                    <strong>Types:</strong>
+                    {{#if this.sport}}Sport{{/if}}
+                    {{#if this.trad}}Trad{{/if}}
+                    {{#if this.toprope}}Top Rope{{/if}}
+                    {{#if this.boulder}}Boulder{{/if}}
+                    {{#if this.snow}}Snow{{/if}}
+                    {{#if this.alpine}}Alpine{{/if}}
+                </p>
                 <p><strong>Description:</strong> {{this.description}}</p>
             </div>
             {{/each}}
