@@ -11,7 +11,7 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
+            grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
             gap: 20px; /* Space between cards */
             justify-items: center; /* Center align each card */
         }
@@ -23,23 +23,79 @@
             border-radius: 8px;
             box-sizing: border-box;
             max-width: 300px;
+            width: 100%; /* Ensure cards don't overflow */
         }
 
-        .card img {
-            width: 100%;
-            border-radius: 5px;
+        #filterModal, #addRouteModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
         }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+        }
+
+        /* Additional styles for modal buttons */
+        #typeDropdownMenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        #typeDropdownButton {
+            cursor: pointer;
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-header, .modal-body {
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        {{#if username}}
         <h1>Welcome, {{username}}!</h1>
-        {{else}}
-        <h1>Welcome!</h1>
-        {{/if}}
-        <button id="filterModalButton">Filter</button>
-        <div id="filterModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:400px; background-color:white; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,0.2); border-radius:8px; z-index:1000;">
+
+        <!-- Filter Button -->
+        <button id="filterModalButton">Filter Routes</button>
+
+        <!-- Add Route Button (now triggering popup) -->
+        <button id="addRouteModalButton">Add New Route</button>
+
+        <!-- Overlay -->
+        <div id="overlay"></div>
+
+        <!-- Filter Modal Form (unchanged) -->
+        <div id="filterModal">
+            <div class="modal-header">Filter</div>
             <form id="filterForm">
                 <label for="name">Route Name:</label>
                 <input type="text" id="filterName" name="name"><br><br>
@@ -68,51 +124,73 @@
                 <button type="button" id="closeModal">Close</button>
             </form>
         </div>
-        {{#if routes}}
-        <div class="card-container">
-            {{#each routes}}
-            <div class="card" id="route-card-{{this.id}}">
-                <!-- Route Name -->
-                <h2>{{this.routename}}</h2>
 
-                <!-- Route Details -->
-                <p>
-                    <strong>Rating:</strong>
-                    {{#if this.rating}}
-                    {{this.rating}}
-                    {{else}}
-                    Unrated
-                    {{/if}}
-                </p>
-                <p><strong>Relative Location:</strong> {{this.areaname}} {{this.location}}</p>
-                <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
-                <p><strong>Difficulty:</strong> {{this.grade}}</p>
-                <p><strong>Safety:</strong> {{this.safety}}</p>
-                <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
-
-
-                <!-- Route Types -->
-                <p>
-                    <strong>Types:</strong>
-                    {{#if this.sport}}Sport{{/if}}
-                    {{#if this.trad}}Trad{{/if}}
-                    {{#if this.toprope}}Top Rope{{/if}}
-                    {{#if this.boulder}}Boulder{{/if}}
-                    {{#if this.snow}}Snow{{/if}}
-                    {{#if this.alpine}}Alpine{{/if}}
-                </p>
-
-                <!-- Route Description -->
-                <p><strong>Description:</strong> {{this.description}}</p>
-
-            </div>
-            {{/each}}
+        <!-- Add Route Modal Form (new popup) -->
+        <div id="addRouteModal">
+            <div class="modal-header">Add Route</div>
+            <form method="POST" action="/add-route">
+                <label>Route Name:</label>
+                <input type="text" name="routeName" required><br>
+                
+                <label>Grade:</label>
+                <input type="text" name="grade" required><br>
+                
+                <label>Safety:</label>
+                <input type="text" name="safety" required><br>
+                
+                <label>Sport:</label>
+                <input type="checkbox" name="sport"><br>
+                <label>Trad:</label>
+                <input type="checkbox" name="trad"><br>
+                <label>Toprope:</label>
+                <input type="checkbox" name="toprope"><br>
+                <label>Boulder:</label>
+                <input type="checkbox" name="boulder"><br>
+                <label>Snow:</label>
+                <input type="checkbox" name="snow"><br>
+                <label>Alpine:</label>
+                <input type="checkbox" name="alpine"><br>
+                
+                <label>Description:</label>
+                <textarea name="description"></textarea><br>
+                
+                <label>Location:</label>
+                <input type="text" name="location"><br>
+                
+                <label>Area Latitude:</label>
+                <input type="number" step="0.000001" name="areaLatitude"><br>
+                
+                <label>Area Longitude:</label>
+                <input type="number" step="0.000001" name="areaLongitude"><br>
+                
+                <label>Area Name:</label>
+                <input type="text" name="areaName"><br>
+                
+                <label>First Ascent:</label>
+                <input type="text" name="firstAscent"><br>
+                
+                <button type="submit">Add Route</button>
+                <button type="button" id="closeAddRouteModal">Close</button>
+            </form>
         </div>
+
+        {{#if routes}}
+            <div class="card-container">
+                {{#each routes}}
+                <div class="card" id="route-card-{{this.id}}">
+                    <h2>{{this.routeName}}</h2>
+                    <p><strong>Location:</strong> {{this.areaName}} {{this.location}}</p>
+                    <p><strong>Grade:</strong> {{this.grade}}</p>
+                    <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+                    <p><strong>Description:</strong> {{this.description}}</p>
+                </div>
+                {{/each}}
+            </div>
         {{else}}
-        <p>No routes available</p>
+            <p>No routes available</p>
         {{/if}}
     </div>
-<script src="/js/script.js"></script>
+
+    <script src="/js/script.js"></script>
 </body>
 </html>
-

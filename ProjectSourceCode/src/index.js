@@ -130,7 +130,9 @@ app.post('/login', async (req, res) => {
       return res.render('pages/login', { message: `Incorrect username or password.` });
     }
     req.session.user = user;
-    req.session.save();
+    req.session.save(() => {
+      console.log("Session saved:", req.session.user);  // <-- Log session data
+    });
 
     res.redirect('/home');
 
@@ -203,29 +205,44 @@ app.get('/routes', async (req, res) => {
 // Add Route - GET route (requires login)
 // index.js
 // Example middleware to check if the user is authenticated
+// Authentication Required middleware
 function requireAuth(req, res, next) {
-  if (!req.session || !req.session.user) {
-    return res.redirect('/login');
+  console.log("Checking authentication...");  // <-- Log to check if middleware is triggered
+  if (!req.session.user) {
+    console.log("Not authenticated, redirecting to login..."); // Log if not authenticated
+    return res.redirect('/login?message=Please log in first');
   }
   next();
 }
-// Use it in routes where authentication is required
+
+// Apply requireAuth only to routes that require authentication
+app.get('/add-route', requireAuth, (req, res) => {
+  res.render('pages/add-route', { username: req.session.user?.username, email: req.session.user?.email });
+});
+
 app.post('/add-route', requireAuth, async (req, res) => {
-  const { routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine } = req.body;
+  const {
+    routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
+    snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent
+  } = req.body;
+
+  const latitude = areaLatitude ? parseFloat(areaLatitude) : null;
+  const longitude = areaLongitude ? parseFloat(areaLongitude) : null;
+
   try {
-    const newRoute = await db.one(
-      `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine;`,
-      [routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine]
+    await db.none(
+      `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent]
     );
-    console.log('New route added:', newRoute);
-    res.status(200).json({ message: 'Route added successfully', route: newRoute });
+    res.redirect('/routes');
   } catch (error) {
     console.error('Error adding route:', error);
     res.status(500).send('Server Error');
   }
 });
+
+
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
