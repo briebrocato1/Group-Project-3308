@@ -202,25 +202,7 @@ app.get('/routes', async (req, res) => {
   }
 });
 
-// Add Route - GET route (requires login)
-// index.js
-// Example middleware to check if the user is authenticated
-// Authentication Required middleware
-function requireAuth(req, res, next) {
-  console.log("Checking authentication...");  // <-- Log to check if middleware is triggered
-  if (!req.session.user) {
-    console.log("Not authenticated, redirecting to login..."); // Log if not authenticated
-    return res.redirect('/login?message=Please log in first');
-  }
-  next();
-}
-
-// Apply requireAuth only to routes that require authentication
-app.get('/add-route', requireAuth, (req, res) => {
-  res.render('pages/add-route', { username: req.session.user?.username, email: req.session.user?.email });
-});
-
-app.post('/add-route', requireAuth, async (req, res) => {
+app.post('/add-route', async (req, res) => {
   const {
     routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
     snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent
