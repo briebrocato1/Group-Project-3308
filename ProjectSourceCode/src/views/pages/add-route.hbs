@@ -1,43 +1,123 @@
-<form method="POST" action="/add-route">
-  <label>Route Name:</label>
-  <input type="text" name="routeName" required><br>
-  
-  <label>Grade:</label>
-  <input type="text" name="grade" required><br>
-  
-  <label>Safety:</label>
-  <input type="text" name="safety" required><br>
-  
-  <label>Sport:</label>
-  <input type="checkbox" name="sport"><br>
-  <label>Trad:</label>
-  <input type="checkbox" name="trad"><br>
-  <label>Toprope:</label>
-  <input type="checkbox" name="toprope"><br>
-  <label>Boulder:</label>
-  <input type="checkbox" name="boulder"><br>
-  <label>Snow:</label>
-  <input type="checkbox" name="snow"><br>
-  <label>Alpine:</label>
-  <input type="checkbox" name="alpine"><br>
-  
-  <label>Description:</label>
-  <textarea name="description"></textarea><br>
-  
-  <label>Location:</label>
-  <input type="text" name="location"><br>
-  
-  <label>Area Latitude:</label>
-  <input type="number" step="0.000001" name="areaLatitude"><br>
-  
-  <label>Area Longitude:</label>
-  <input type="number" step="0.000001" name="areaLongitude"><br>
-  
-  <label>Area Name:</label>
-  <input type="text" name="areaName"><br>
-  
-  <label>First Ascent:</label>
-  <input type="text" name="firstAscent"><br>
-  
-  <button type="submit">Add Route</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Route</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            flex: 1 1 50%;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-button {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .back-button a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Route</h1>
+        <form method="POST" action="/add-route">
+            <label for="routeName">Route Name:</label>
+            <input type="text" id="routename" name="routeName" required>
+            
+            <label for="grade">Grade:</label>
+            <input type="text" id="grade" name="grade" required>
+            
+            <label for="safety">Safety:</label>
+            <input type="text" id="safety" name="safety" required>
+
+            <label>Route Types:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="sport"> Sport</label>
+                <label><input type="checkbox" name="trad"> Trad</label>
+                <label><input type="checkbox" name="toprope"> Toprope</label>
+                <label><input type="checkbox" name="boulder"> Boulder</label>
+                <label><input type="checkbox" name="snow"> Snow</label>
+                <label><input type="checkbox" name="alpine"> Alpine</label>
+            </div>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4"></textarea>
+            
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location">
+            
+            <label for="areaLatitude">Area Latitude:</label>
+            <input type="number" id="areaLatitude" name="areaLatitude" step="0.000001">
+            
+            <label for="areaLongitude">Area Longitude:</label>
+            <input type="number" id="areaLongitude" name="areaLongitude" step="0.000001">
+            
+            <label for="areaName">Area Name:</label>
+            <input type="text" id="areaName" name="areaName">
+            
+            <label for="firstAscent">First Ascent:</label>
+            <input type="text" id="firstAscent" name="firstAscent">
+            
+            <button type="submit">Add Route</button>
+        </form>
+        <div class="back-button">
+            <a href="/routes">Back to Routes</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -170,3 +170,23 @@ document.getElementById('applyFilters').addEventListener('click', () => {
   const queryParams = new URLSearchParams(formData).toString();
   window.location.href = `/routes?${queryParams}`;
 });
+
+document.getElementById('addRouteModalButton').addEventListener('click', () => {
+  document.getElementById('addRouteModal').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+});
+
+document.getElementById('closeAddRouteModal').addEventListener('click', () => {
+  document.getElementById('addRouteModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+});
+
+document.getElementById('filterModalButton').addEventListener('click', () => {
+  document.getElementById('filterModal').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+});
+
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('filterModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+});
