@@ -43,8 +43,15 @@
         <label for="grade">Grade:</label>
         <input type="text" id="filterGrade" name="grade"><br><br>
 
-        <label for="safety">Safety:</label>
-        <input type="text" id="filterSafety" name="safety"><br><br>
+        <label for="safety">Safety Rating:</label>
+        <select id="safety" name="safety">
+            <option value="">--Select Safety Rating--</option>
+            <option value="G">G (Good)</option>
+            <option value="PG">PG (Pretty Good)</option>
+            <option value="R">R (Runout)</option>
+            <option value="X">X (Extreme)</option>
+        </select>
+        <br><br>
 
         <label for="types">Route Types:</label>
         <div id="typeDropdown" style="position: relative;">
