@@ -1,5 +1,5 @@
 <div class="header-image">
-    {{!-- <img src="/img/trees.jpg" alt="Message Board Header" class="header-img"> --}}
+    <img src="/img/trees.jpg" alt="Message Board Header" class="header-img">
     <h1 id="messageHead">Message Board</h1>
 </div>
 
@@ -28,7 +28,9 @@
 </div>
 
 {{#each boardmessages}}
-{{> boardmessage}}
+<div class="message-box">
+    {{> boardmessage}}
+</div>
 {{/each}}
 
 <script src="/js/script.js"></script> 

@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Climbing Routes</title>
-    <style>
-        .container {
-            padding: 20px;
-        }
-
+@@ -11,9 +12,12 @@
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for up to 3 columns */
             gap: 20px; /* Space between cards */
             justify-items: center; /* Center align each card */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* Responsive layout for up to 3 columns */
+            gap: 20px;
+            /* Space between cards */
+            justify-items: center;
+            /* Center align each card */
         }
-
         .card {
-            background-color: #f9f9f9;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            box-sizing: border-box;
-            max-width: 300px;
-        }
-
-        .card img {
-            width: 100%;
-            border-radius: 5px;
+@@ -31,43 +35,51 @@
         }
     </style>
 </head>
@@ -90,6 +80,33 @@
                     <p><strong>Difficulty:</strong> {{this.grade}}</p>
                     <p><strong>Safety:</strong> {{this.safety}}</p>
                     <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+        <div class="card-container">
+            {{#each routes}}
+            <div class="card" id="route-card-{{this.id}}">
+                <!-- Route Name -->
+                <h2>{{this.routename}}</h2>
+                <!-- Route Details -->
+                <p><strong>Rating:</strong>
+                    {{#if this.rating}}
+                    {{this.rating}}
+                    {{else}}
+                    Unrated
+                    {{/if}}
+                </p>
+                <p><strong>Coordinates:</strong> Lat: {{this.arealatitude}}, Long: {{this.arealongitude}}</p>
+                <p><strong>Difficulty:</strong> {{this.grade}}</p>
+                <p><strong>Safety:</strong> {{this.safety}}</p>
+                <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
+                <!-- Route Types -->
+                <p><strong>Types:</strong>
+                    {{#if this.sport}}Sport{{/if}}
+                    {{#if this.trad}}Trad{{/if}}
+                    {{#if this.toprope}}Top Rope{{/if}}
+                    {{#if this.boulder}}Boulder{{/if}}
+                    {{#if this.snow}}Snow{{/if}}
+                    {{#if this.alpine}}Alpine{{/if}}
+                </p>
+                <!-- Route Description -->
 
                     
                     <!-- Route Types -->
@@ -108,8 +125,11 @@
                 </div>
                 {{/each}}
             </div>
+            {{/each}}
+        </div>
         {{else}}
             <p>No routes available</p>
+        <p>No routes available</p>
         {{/if}}
     </div>
     <script src="/js/script.js"></script>
