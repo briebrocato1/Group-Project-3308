@@ -16,6 +16,7 @@ const hbs = handlebars.create({
   partialsDir: __dirname + '/views/partials',
 });
 
+// Registering handlebars helper to check equality of two variables with handlebars
 Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
 
 const dbConfig = {
@@ -30,7 +31,7 @@ const db = pgp(dbConfig);
 
 db.connect()
   .then(obj => {
-    console.log('Database connection successful');
+      console.log('Database connection successful');
     obj.done();
   })
   .catch(error => {
@@ -56,7 +57,20 @@ app.use(
   })
 );
 
+async function insertadmin() {
+    try {
+        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
+        if (!admin) {
+            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
+            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
+insertadmin();
 
 //Routes
 
@@ -116,7 +130,9 @@ app.post('/login', async (req, res) => {
       return res.render('pages/login', { message: `Incorrect username or password.` });
     }
     req.session.user = user;
-    req.session.save();
+    req.session.save(() => {
+      console.log("Session saved:", req.session.user);  // <-- Log session data
+    });
 
     res.redirect('/home');
 
@@ -186,32 +202,29 @@ app.get('/routes', async (req, res) => {
   }
 });
 
-// Add Route - GET route (requires login)
-// index.js
-// Example middleware to check if the user is authenticated
-function requireAuth(req, res, next) {
-  if (!req.session || !req.session.user) {
-    return res.redirect('/login');
-  }
-  next();
-}
-// Use it in routes where authentication is required
-app.post('/add-route', requireAuth, async (req, res) => {
-  const { routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine } = req.body;
+app.post('/add-route', async (req, res) => {
+  const {
+    routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
+    snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent
+  } = req.body;
+
+  const latitude = areaLatitude ? parseFloat(areaLatitude) : null;
+  const longitude = areaLongitude ? parseFloat(areaLongitude) : null;
+
   try {
-    const newRoute = await db.one(
-      `INSERT INTO routes (routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine;`,
-      [routeName, grade, safety, description, firstAscent, location, areaLatitude, areaLongitude, areaName, sport, trad, toprope, boulder, snow, alpine]
+    await db.none(
+      `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent]
     );
-    console.log('New route added:', newRoute);
-    res.status(200).json({ message: 'Route added successfully', route: newRoute });
+    res.redirect('/routes');
   } catch (error) {
     console.error('Error adding route:', error);
     res.status(500).send('Server Error');
   }
 });
+
+
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
@@ -266,9 +279,6 @@ function setIndentLevels(messages, parentLevel = 0) {
 app.post('/messageboard', async (req, res) => {
   const { author, text } = req.body;
   try {
-    res.render('pages/messageboard', {
-      isMessageBoard: true 
-    });
     const newMessage = await db.one(
       `INSERT INTO messages (author, text, parentid)
       VALUES ($1, $2, NULL) 
@@ -277,7 +287,7 @@ app.post('/messageboard', async (req, res) => {
 
     console.log('New message added:', newMessage);
 
-    res.status(200).json({ message: 'Message added successfully' });
+      res.status(200).json({ message: 'Message added successfully'});
   } catch (error) {
     console.error('Error adding message:', error);
     res.status(500).send('Server Error');
@@ -339,7 +349,7 @@ app.post('/delete-message/:id', async (req, res) => {
 app.get('/messageboard', async (req, res) => {
   try {
     const messages = await getMessages(req.session.user.username);
-    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages,isMessageBoard:true }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
   }
