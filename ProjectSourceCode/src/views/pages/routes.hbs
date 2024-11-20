@@ -207,7 +207,9 @@
         <div class="card-container">
             {{#each routes}}
             <div class="card" id="route-card-{{this.id}}">
+                <a href="/route/{{this.id}}" style="text-decoration: none; color: inherit;">
                 <h2>{{this.routename}}</h2>
+                </a>
                 <p><strong>Rating:</strong>
                     {{#if this.rating}}
                     {{this.rating}}

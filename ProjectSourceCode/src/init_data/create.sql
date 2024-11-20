@@ -42,6 +42,7 @@ CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     author VARCHAR(50) NOT NULL,
     body VARCHAR(2500) NOT NULL,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     route_id INT NOT NULL,
-    CONSTRAINT route_id FOREIGN KEY (route_id) REFERENCES routes(id)
+    CONSTRAINT fk_route FOREIGN KEY (route_id) REFERENCES routes(id)
 );
