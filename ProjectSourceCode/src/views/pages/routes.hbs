@@ -8,6 +8,8 @@
     <style>
         .container {
             padding: 20px;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         .card-container {
@@ -88,6 +90,10 @@
 </head>
 
 <body>
+    <div class="header-image">
+    <img src="/img/trees.jpg" alt="Routes Header" class="header-img">
+    <h1 id="messageHead">Routes</h1>
+    </div>
     <div class="container">
         {{#if username}}
         <h1>Welcome, {{username}}!</h1>

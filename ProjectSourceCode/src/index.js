@@ -195,6 +195,7 @@ app.get('/routes', async (req, res) => {
           username: req.session.user.username,
           email: req.session.user.email,
           routes: routes,
+          isRoutes:true,
       });
   } catch (error) {
       console.error('Error fetching routes:', error.message);
