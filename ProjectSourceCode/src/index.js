@@ -206,7 +206,7 @@ app.get('/routes', async (req, res) => {
 app.post('/add-route', async (req, res) => {
   const {
     routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
-    snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent
+    snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent, rating
   } = req.body;
 
   const latitude = areaLatitude ? parseFloat(areaLatitude) : null;
@@ -214,9 +214,9 @@ app.post('/add-route', async (req, res) => {
 
   try {
     await db.none(
-      `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
-      [routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent]
+      `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent, rating)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
+      [routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent, rating]
     );
     res.redirect('/routes');
   } catch (error) {
