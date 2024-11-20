@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +12,12 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
-            gap: 20px; /* Space between cards */
-            justify-items: center; /* Center align each card */
+            grid-template-columns: repeat(4, 1fr);
+            /* 4 cards per row */
+            gap: 20px;
+            /* Space between cards */
+            justify-items: center;
+            /* Center align each card */
         }
 
         .card {
@@ -23,10 +27,12 @@
             border-radius: 8px;
             box-sizing: border-box;
             max-width: 300px;
-            width: 100%; /* Ensure cards don't overflow */
+            width: 100%;
+            /* Ensure cards don't overflow */
         }
 
-        #filterModal, #addRouteModal {
+        #filterModal,
+        #addRouteModal {
             display: none;
             position: fixed;
             top: 50%;
@@ -74,12 +80,13 @@
             margin-bottom: 20px;
         }
 
-        .modal-header, .modal-body {
+        .modal-header,
+        .modal-body {
             text-align: center;
         }
-
     </style>
 </head>
+
 <body>
     <div class="container">
         {{#if username}}
@@ -111,17 +118,18 @@
                 <input type="text" id="filterGrade" name="grade"><br><br>
                 <label for="safety">Safety Rating:</label>
                 <select id="safety" name="safety">
-                  <option value="">--Select Safety Rating--</option>
-                  <option value="G">G (Good)</option>
-                  <option value="PG">PG (Pretty Good)</option>
-                  <option value="R">R (Runout)</option>
-                  <option value="X">X (Extreme)</option>
+                    <option value="">--Select Safety Rating--</option>
+                    <option value="G">G (Good)</option>
+                    <option value="PG">PG (Pretty Good)</option>
+                    <option value="R">R (Runout)</option>
+                    <option value="X">X (Extreme)</option>
                 </select>
                 <br><br>
                 <label for="types">Route Types:</label>
                 <div id="typeDropdown" style="position: relative;">
                     <button type="button" id="typeDropdownButton">Select Types</button>
-                    <div id="typeDropdownMenu" style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; z-index: 1000;">
+                    <div id="typeDropdownMenu"
+                        style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; z-index: 1000;">
                         <label><input type="checkbox" name="types" value="sport"> Sport</label><br>
                         <label><input type="checkbox" name="types" value="trad"> Trad</label><br>
                         <label><input type="checkbox" name="types" value="toprope"> Toprope</label><br>
@@ -194,6 +202,13 @@
             {{#each routes}}
             <div class="card" id="route-card-{{this.id}}">
                 <h2>{{this.routename}}</h2>
+                <p><strong>Rating:</strong>
+                    {{#if this.rating}}
+                    {{this.rating}}
+                    {{else}}
+                    Unrated
+                    {{/if}}
+                </p>
                 <p><strong>Location:</strong> {{this.areaname}} {{this.location}}</p>
                 <p><strong>Grade:</strong> {{this.grade}}</p>
                 <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
@@ -218,4 +233,5 @@
 
     <script src="/js/script.js"></script>
 </body>
+
 </html>

@@ -22,7 +22,8 @@ CREATE TABLE routes (
     areaLongitude DECIMAL(9,6),
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255),
-    firstAscent VARCHAR(255)
+    firstAscent VARCHAR(255),
+    rating VARCHAR(255)
 );
 
 
