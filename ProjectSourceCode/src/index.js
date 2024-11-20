@@ -16,6 +16,7 @@ const hbs = handlebars.create({
   partialsDir: __dirname + '/views/partials',
 });
 
+// Registering handlebars helper to check equality of two variables with handlebars
 Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
 
 const dbConfig = {
@@ -30,7 +31,7 @@ const db = pgp(dbConfig);
 
 db.connect()
   .then(obj => {
-    console.log('Database connection successful');
+      console.log('Database connection successful');
     obj.done();
   })
   .catch(error => {
@@ -56,12 +57,22 @@ app.use(
   })
 );
 
+async function insertadmin() {
+    try {
+        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
+        if (!admin) {
+            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
+            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
+insertadmin();
 
 //Routes
-app.get('/', (req, res) => {
-  res.redirect('/home');
-});
 
 app.get('/welcome', (req, res) => {
   res.json({ status: 'success', message: 'Welcome!' });
@@ -119,7 +130,9 @@ app.post('/login', async (req, res) => {
       return res.render('pages/login', { message: `Incorrect username or password.` });
     }
     req.session.user = user;
-    req.session.save();
+    req.session.save(() => {
+      console.log("Session saved:", req.session.user);  // <-- Log session data
+    });
 
     res.redirect('/home');
 
@@ -146,27 +159,71 @@ app.get('/home', (req, res) => {
 
 app.get('/routes', async (req, res) => {
   try {
-    // Fetch all routes from the database
-    const routes = await db.any('SELECT * FROM routes');
-    // Fetch all routes, including the average rating (will be null if there are no reviews)
-    const routes = await db.any(`
-      SELECT id, routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLongitude, areaLatitude, areaName, firstAscent, rating 
-      FROM routes
-    `);
-    console.log('Fetched routes:', routes); // Log the fetched data to the console
+      const { name, grade, safety, types, firstascent, areaname } = req.query;
 
-    // Render the routes page with the retrieved data
-    // Render the routes page with the retrieved data, including rating information
-    res.render('pages/routes', {
-      username: req.session.user.username,
-      email: req.session.user.email,
-      routes: routes,
-    });
+      let query = 'SELECT * FROM routes WHERE 1=1';
+      const values = [];
+
+      if (name) {
+          query += ' AND routeName ILIKE $1';
+          values.push(`%${name}%`);
+      }
+      if (grade) {
+          query += ` AND grade = $${values.length + 1}`;
+          values.push(grade);
+      }
+      if (safety) {
+          query += ` AND safety = $${values.length + 1}`;
+          values.push(safety);
+      }
+      if (firstascent) {
+          query += ` AND firstAscent ILIKE $${values.length + 1}`;
+          values.push(`%${firstascent}%`);
+      }
+      if (areaname) {
+          query += ` AND areaName ILIKE $${values.length + 1}`;
+          values.push(`%${areaname}%`);
+      }
+      if (types) {
+          const typeFilters = types.split(',').map(type => `${type} = true`);
+          query += ` AND (${typeFilters.join(' OR ')})`;
+      }
+
+      const routes = await db.any(query, values);
+
+      res.render('pages/routes', {
+          username: req.session.user.username,
+          email: req.session.user.email,
+          routes: routes,
+      });
   } catch (error) {
-    console.error('Error fetching routes:', error.message);
+      console.error('Error fetching routes:', error.message);
+      res.status(500).send('Server Error');
+  }
+});
+
+app.post('/add-route', async (req, res) => {
+  const {
+    routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
+    snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent
+  } = req.body;
+
+  const latitude = areaLatitude ? parseFloat(areaLatitude) : null;
+  const longitude = areaLongitude ? parseFloat(areaLongitude) : null;
+
+  try {
+    await db.none(
+      `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent]
+    );
+    res.redirect('/routes');
+  } catch (error) {
+    console.error('Error adding route:', error);
     res.status(500).send('Server Error');
   }
 });
+
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
@@ -187,7 +244,7 @@ async function getMessages(user) {
     messages.forEach(msg => {
         messageMap[msg.id] = { ...msg, replies: [], username: user };
     });
-
+    
     messages.forEach(msg => {
       if (msg.parentid) {
 
@@ -222,9 +279,6 @@ function setIndentLevels(messages, parentLevel = 0) {
 app.post('/messageboard', async (req, res) => {
   const { author, text } = req.body;
   try {
-    res.render('pages/messageboard', {
-      isMessageBoard: true 
-    });
     const newMessage = await db.one(
       `INSERT INTO messages (author, text, parentid)
       VALUES ($1, $2, NULL) 
@@ -233,7 +287,7 @@ app.post('/messageboard', async (req, res) => {
 
     console.log('New message added:', newMessage);
 
-    res.status(200).json({ message: 'Message added successfully' });
+      res.status(200).json({ message: 'Message added successfully'});
   } catch (error) {
     console.error('Error adding message:', error);
     res.status(500).send('Server Error');
@@ -295,7 +349,7 @@ app.post('/delete-message/:id', async (req, res) => {
 app.get('/messageboard', async (req, res) => {
   try {
     const messages = await getMessages(req.session.user.username);
-    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages }); // Render messages with Handlebars
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages,isMessageBoard:true }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
   }

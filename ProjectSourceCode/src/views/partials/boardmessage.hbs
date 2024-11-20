@@ -12,7 +12,11 @@
     {{#ifeq username author}}
     <button class="delete-btn" data-message-id="{{id}}">Delete</button>
     {{else}}
-    <button class="delete-btn" data-message-id="{{id}}" disabled>Delete</button>
+        {{#ifeq username "admin"}}
+        <button class="delete-btn" data-message-id="{{id}}">Delete</button>
+        {{else}}
+        <button class="delete-btn" data-message-id="{{id}}" disabled>Delete</button>
+        {{/ifeq}}
     {{/ifeq}}
     <div class="reply-form" id="reply-form-{{id}}" style="display: none;">
         <form class="replyForm" data-parent-id="{{id}}">
