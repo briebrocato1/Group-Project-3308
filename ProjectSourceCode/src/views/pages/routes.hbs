@@ -25,13 +25,24 @@
         .card {
             background-color: #f9f9f9;
             padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
             box-sizing: border-box;
             max-width: 300px;
             width: 100%;
             /* Ensure cards don't overflow */
+             transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left;
         }
+
+ 
+ 
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+
 
         #filterModal,
         #addRouteModal {
@@ -41,11 +52,14 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
             z-index: 1000;
         }
+
+
 
         #overlay {
             display: none;
@@ -87,6 +101,26 @@
             text-align: center;
         }
     </style>
+    <script>
+    // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Find all elements with the class "stars"
+            document.querySelectorAll('.stars').forEach(starContainer => {
+                const rating = parseFloat(starContainer.getAttribute('data-rating')) || 0; // Get the rating, default to 0
+                const fullStars = Math.floor(rating); // Count full stars
+                const halfStar = rating % 1 >= 0.5;  // Determine if there's a half star
+                const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Count empty stars
+
+                // Generate stars HTML
+                starContainer.innerHTML = `
+                    ${'<i class="fas fa-star"></i>'.repeat(fullStars)}  <!-- Full Stars -->
+                    ${halfStar ? '<i class="fas fa-star-half-alt"></i>' : ''} <!-- Half Star -->
+                    ${'<i class="far fa-star"></i>'.repeat(emptyStars)} <!-- Empty Stars -->
+                `;
+            });
+        });
+    </script>
+
 </head>
 
 <body>
@@ -102,13 +136,13 @@
         {{/if}}
 
         <!-- Filter Button -->
-        <button id="filterModalButton">Filter Routes</button>
+        <button id="filterModalButton" class="routes-button">Filter Routes</button>
 
         <!-- Add Route Button (now triggering popup) -->
         {{#if username}}
-        <button id="addRouteModalButton">Add New Route</button>
+        <button id="addRouteModalButton" class="routes-button">Add New Route</button>
         {{else}}
-        <button id="addRouteModalButton" disabled>Add New Route</button>
+        <button class="routes-button" id="addRouteModalButton" disabled>Add New Route</button>
         {{/if}}
 
         <!-- Overlay -->
@@ -133,7 +167,7 @@
                 <br><br>
                 <label for="types">Route Types:</label>
                 <div id="typeDropdown" style="position: relative;">
-                    <button type="button" id="typeDropdownButton">Select Types</button>
+                    <button type="button" id="typeDropdownButton" class="filter-buttons">Select Types</button>
                     <div id="typeDropdownMenu"
                         style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; z-index: 1000;">
                         <label><input type="checkbox" name="types" value="sport"> Sport</label><br>
@@ -149,8 +183,8 @@
                 <input type="text" id="filterAreaName" name="areaname"><br><br>
                 <label for="firstascent">First Ascent:</label>
                 <input type="text" id="filterFirstAscent" name="firstascent"><br><br>
-                <button type="button" id="applyFilters">Apply</button>
-                <button type="button" id="closeModal">Close</button>
+                <button type="button" id="applyFilters" class="filter-buttons">Apply</button>
+                <button type="button" id="closeModal" class="filter-buttons">Close</button>
             </form>
         </div>
 
@@ -198,8 +232,8 @@
                 <label>First Ascent:</label>
                 <input type="text" name="firstAscent"><br>
 
-                <button type="submit">Add Route</button>
-                <button type="button" id="closeAddRouteModal">Close</button>
+                <button type="submit" class="filter-buttons">Add Route</button>
+                <button type="button" id="closeAddRouteModal" class="filter-buttons">Close</button>
             </form>
         </div>
 
@@ -210,7 +244,7 @@
                 <h2>{{this.routename}}</h2>
                 <p><strong>Rating:</strong>
                     {{#if this.rating}}
-                    {{this.rating}}
+                    <span class="stars" data-rating="{{this.rating}}"></span>
                     {{else}}
                     Unrated
                     {{/if}}
