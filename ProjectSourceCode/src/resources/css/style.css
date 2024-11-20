@@ -127,6 +127,36 @@ textarea {
 
 /* Routes CSS */
 
+.routes-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 10px;
+}
+
+.routes-button:hover {
+    background-color: #0056b3;
+}
+
+.routes-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.filter-buttons{
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
 
 
 
