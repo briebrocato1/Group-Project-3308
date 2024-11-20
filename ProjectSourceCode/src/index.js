@@ -203,6 +203,48 @@ app.get('/routes', async (req, res) => {
   }
 });
 
+app.get('/route/:id', async (req, res) => {
+  const routeId = req.params.id;
+  try {
+      // Fetch the route details
+      const route = await db.oneOrNone('SELECT * FROM routes WHERE id = $1', [routeId]);
+
+      if (!route) {
+          return res.status(404).send('Route not found');
+      }
+
+      // Fetch reviews for the route
+      const reviews = await db.any('SELECT * FROM reviews WHERE route_id = $1', [routeId]);
+
+      res.render('pages/route', {
+          username: req.session.user.username,
+          email: req.session.user.email,
+          route: route,
+          reviews: reviews,
+      });
+  } catch (error) {
+      console.error('Error fetching route details:', error.message);
+      res.status(500).send('Server Error');
+  }
+});
+
+app.post('/add-review', async (req, res) => {
+  const { route_id, author, rating, comment } = req.body;
+
+  try {
+      await db.none(
+          'INSERT INTO reviews (author, body, rating, route_id) VALUES ($1, $2, $3, $4)',
+          [author, body, rating, route_id]
+      );
+
+      res.redirect(`/route/${route_id}`);
+  } catch (error) {
+      console.error('Error adding review:', error.message);
+      res.status(500).send('Server Error');
+  }
+});
+
+
 app.post('/add-route', async (req, res) => {
   const {
     routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
