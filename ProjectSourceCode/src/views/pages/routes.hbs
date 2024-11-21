@@ -229,6 +229,9 @@
                 <label>Area Name:</label>
                 <input type="text" name="areaName"><br>
 
+                <label>Rating:</label>
+                <input type="text" name="rating"><br>
+
                 <label>First Ascent:</label>
                 <input type="text" name="firstAscent"><br>
 
@@ -241,7 +244,9 @@
         <div class="card-container">
             {{#each routes}}
             <div class="card" id="route-card-{{this.id}}">
+                <a href="/route/{{this.id}}" style="text-decoration: none; color: inherit;">
                 <h2>{{this.routename}}</h2>
+                </a>
                 <p><strong>Rating:</strong>
                     {{#if this.rating}}
                     <span class="stars" data-rating="{{this.rating}}"></span>
