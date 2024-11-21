@@ -157,6 +157,22 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
+const getRandomImage = () => {
+  const images = [
+      '/img/trees.jpg',
+      '/img/trees.jpg',
+      '/img/img3.jpg',
+      '/img/img4.jpg',
+      '/img/img5.jpg'
+  ];
+  return images[Math.floor(Math.random() * images.length)];
+};
+
+// Add a random image to each route
+routes.forEach(route => {
+  route.image = getRandomImage();
+});
+
 app.get('/routes', async (req, res) => {
   try {
       const { name, grade, safety, types, firstascent, areaname } = req.query;
@@ -188,8 +204,22 @@ app.get('/routes', async (req, res) => {
           const typeFilters = types.split(',').map(type => `${type} = true`);
           query += ` AND (${typeFilters.join(' OR ')})`;
       }
+    //   const imagePool = [
+    //     "resources/img/trees.jpg",
+    //     "resources/img/trees.jpg",
+    //     "resources/img/trees.jpg",
+    //     "resources/img/trees.jpg",
+    //     "resources/img/trees.jpg"
+    // ];
+
+    // routes.forEach(route => {
+    //   route.image = imagePool[Math.floor(Math.random() * imagePool.length)];
+    //   });
+
 
       const routes = await db.any(query, values);
+
+
 
       res.render('pages/routes', {
           username: req.session.user.username,

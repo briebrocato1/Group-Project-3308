@@ -241,6 +241,7 @@
         <div class="card-container">
             {{#each routes}}
             <div class="card" id="route-card-{{this.id}}">
+                <img src="{{this.image}}" alt="{{this.routename}}" class="route-image" style="width: 100%; border-radius: 10px;">
                 <h2>{{this.routename}}</h2>
                 <p><strong>Rating:</strong>
                     {{#if this.rating}}
