@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{route.routename}} - Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>{{route.routename}}</h1>
+        <p><strong>Location:</strong> {{route.areaname}} {{route.location}}</p>
+        <p><strong>Coordinates:</strong> Lat: {{route.arealatitude}}, Long: {{route.arealongitude}}</p>
+        <p><strong>Difficulty:</strong> {{route.grade}}</p>
+        <p><strong>Safety:</strong> {{route.safety}}</p>
+        <p><strong>First Ascent:</strong> {{route.firstascent}}</p>
+        <p><strong>Types:</strong> 
+            {{#if route.sport}}Sport{{/if}} 
+            {{#if route.trad}}Trad{{/if}} 
+            {{#if route.toprope}}Top Rope{{/if}} 
+            {{#if route.boulder}}Boulder{{/if}} 
+            {{#if route.snow}}Snow{{/if}} 
+            {{#if route.alpine}}Alpine{{/if}}
+        </p>
+        <p><strong>Description:</strong> {{route.description}}</p>
+
+        <h2>Reviews</h2>
+        {{#if reviews.length}}
+            {{#each reviews}}
+                <div class="review">
+                    <p><strong>{{this.author}}:</strong> {{this.body}}</p>
+                    <p><em>Rating:</em> {{this.rating}}/5</p>
+                </div>
+            {{/each}}
+        {{else}}
+            <p>No reviews yet. Be the first to add one!</p>
+        {{/if}}
+
+        <h3>Add a Review</h3>
+        <form action="/add-review" method="POST">
+            <input type="hidden" name="route_id" value="{{route.id}}">
+            <label for="author">Your Name:</label>
+            <input type="text" name="author" required><br>
+            <label for="rating">Rating (1-5):</label>
+            <input type="number" name="rating" min="1" max="5" required><br>
+            <label for="body">Review:</label>
+            <textarea name="body" rows="4" required></textarea><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
