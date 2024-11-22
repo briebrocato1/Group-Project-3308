@@ -57,21 +57,6 @@ app.use(
   })
 );
 
-async function insertadmin() {
-    try {
-        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
-        if (!admin) {
-            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
-            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
-        }
-    }
-    catch (err) {
-        console.log(err);
-    }
-}
-
-insertadmin();
-
 //Routes
 
 app.get('/welcome', (req, res) => {
