@@ -7,8 +7,12 @@
 </head>
 <body>
     <div class="container">
+             <!-- Delete button for admin user -->
+        {{#ifeq username "admin"}}
+            <button class="delete-btn" data-route-id="{{route.id}}">Delete Route</button>
+        {{/ifeq}}
         <h1>{{route.routename}}</h1>
-        <p><strong>Location:</strong> {{route.areaname}} {{route.location}}</p>
+        <p><strong>Location:</strong> Area Name: {{route.areaname}}, Relative area: {{route.location}}</p>
         <p><strong>Coordinates:</strong> Lat: {{route.arealatitude}}, Long: {{route.arealongitude}}</p>
         <p><strong>Difficulty:</strong> {{route.grade}}</p>
         <p><strong>Safety:</strong> {{route.safety}}</p>
@@ -22,6 +26,8 @@
             {{#if route.alpine}}Alpine{{/if}}
         </p>
         <p><strong>Description:</strong> {{route.description}}</p>
+
+       
 
         <h2>Reviews</h2>
         {{#if reviews.length}}
@@ -46,6 +52,8 @@
             <textarea name="body" rows="4" required></textarea><br>
             <button type="submit">Submit</button>
         </form>
+
+     
     </div>
 </body>
 </html>

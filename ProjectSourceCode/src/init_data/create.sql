@@ -23,7 +23,8 @@ CREATE TABLE routes (
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255),
     firstAscent VARCHAR(255),
-    rating VARCHAR(255)
+    rating VARCHAR(255),
+    deleted BOOLEAN
 );
 
 
