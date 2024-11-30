@@ -138,7 +138,7 @@ app.post('/login', async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.render('pages/login', { message: `An error occurred. Please try again.` });
+    res.status(400).render('pages/login', { message: `An error occurred. Please try again.` });
   }
 });
 
@@ -387,6 +387,7 @@ app.post('/delete-message/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 });
+
 
 // Define route for displaying messages
 app.get('/messageboard', async (req, res) => {
