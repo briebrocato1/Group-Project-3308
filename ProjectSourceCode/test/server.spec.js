@@ -52,6 +52,30 @@ it('Negative : /register. Checking invalid name', done => {
 });
 });
 
+describe('Testing login API', () => {
+  it('positive : /login', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({username: 'olco', email: 'olco2433@colorado.edu', password: 'fortnite'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+it('Negative : /login. Checking invalid name', done => {
+  chai
+    .request(server)
+    .post('/login')
+    .send({username: 10, email: 10, password: 'fortnite'})
+    .end((err, res) => {
+      expect(res).to.have.status(400);
+      done();
+    });
+});
+});
+
 describe('Positive: Testing Render', () => {
   // Sample test case given to test /test endpoint.
   it('test "/home" route should render with an html response', done => {
