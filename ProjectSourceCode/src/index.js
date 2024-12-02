@@ -20,7 +20,7 @@ const hbs = handlebars.create({
 Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
 
 const dbConfig = {
-  host: process.env.POSTGRES_HOST,
+  host: 'db',
   port: process.env.POSTGRES_PORT,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -68,7 +68,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('pages/register', { message: req.query.message });
+  res.render('pages/register', { message: req.query.message,
+    logIn: true,
+  });
 });
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -98,7 +100,9 @@ app.post('/register', async (req, res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render('pages/login');
+  res.render('pages/login', {
+    logIn:true,
+});
 });
 
 app.post('/login', async (req, res) => {
@@ -142,21 +146,7 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
-const getRandomImage = () => {
-  const images = [
-      '/img/trees.jpg',
-      '/img/trees.jpg',
-      '/img/img3.jpg',
-      '/img/img4.jpg',
-      '/img/img5.jpg'
-  ];
-  return images[Math.floor(Math.random() * images.length)];
-};
 
-// Add a random image to each route
-routes.forEach(route => {
-  route.image = getRandomImage();
-});
 
 app.get('/routes', async (req, res) => {
   try {
@@ -189,17 +179,7 @@ app.get('/routes', async (req, res) => {
           const typeFilters = types.split(',').map(type => `${type} = true`);
           query += ` AND (${typeFilters.join(' OR ')})`;
       }
-    //   const imagePool = [
-    //     "resources/img/trees.jpg",
-    //     "resources/img/trees.jpg",
-    //     "resources/img/trees.jpg",
-    //     "resources/img/trees.jpg",
-    //     "resources/img/trees.jpg"
-    // ];
-
-    // routes.forEach(route => {
-    //   route.image = imagePool[Math.floor(Math.random() * imagePool.length)];
-    //   });
+  
 
 
       const routes = await db.any(query, values);
