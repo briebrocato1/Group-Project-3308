@@ -1,3 +1,5 @@
+INSERT INTO users (username,email,password) VALUES ('admin','boulderingbuffs@gmail.com','$2a$10$t2FV25XVFoM.wF/Ge80CiuCNMS9LDUPQhebbCFxfycu5e9Dxqy7vq');
+
 INSERT INTO messages (author, text, parentID) VALUES
 -- Top-level messages
 ('Alice', 'This is the first message. It is the start of the conversation.', NULL), -- Message 1
