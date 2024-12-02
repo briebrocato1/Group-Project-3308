@@ -31,7 +31,7 @@ const db = pgp(dbConfig);
 
 db.connect()
   .then(obj => {
-      console.log('Database connection successful');
+    console.log('Database connection successful');
     obj.done();
   })
   .catch(error => {
@@ -58,16 +58,16 @@ app.use(
 );
 
 async function insertadmin() {
-    try {
-        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
-        if (!admin) {
-            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
-            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
-        }
+  try {
+    const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
+    if (!admin) {
+      const adminpwd = await bcrypt.hash('s3cur3Ish', 10);
+      await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
     }
-    catch (err) {
-        console.log(err);
-    }
+  }
+  catch (err) {
+    console.log(err);
+  }
 }
 
 insertadmin();
@@ -159,72 +159,72 @@ app.get('/home', (req, res) => {
 
 app.get('/routes', async (req, res) => {
   try {
-      const { name, grade, safety, types, firstascent, areaname } = req.query;
+    const { name, grade, safety, types, firstascent, areaname } = req.query;
 
-      let query = 'SELECT * FROM routes WHERE 1=1';
-      const values = [];
+    let query = 'SELECT * FROM routes WHERE deleted = FALSE';
+    const values = [];
 
-      if (name) {
-          query += ' AND routeName ILIKE $1';
-          values.push(`%${name}%`);
-      }
-      if (grade) {
-          query += ` AND grade = $${values.length + 1}`;
-          values.push(grade);
-      }
-      if (safety) {
-          query += ` AND safety = $${values.length + 1}`;
-          values.push(safety);
-      }
-      if (firstascent) {
-          query += ` AND firstAscent ILIKE $${values.length + 1}`;
-          values.push(`%${firstascent}%`);
-      }
-      if (areaname) {
-          query += ` AND areaName ILIKE $${values.length + 1}`;
-          values.push(`%${areaname}%`);
-      }
-      if (types) {
-          const typeFilters = types.split(',').map(type => `${type} = true`);
-          query += ` AND (${typeFilters.join(' OR ')})`;
-      }
+    if (name) {
+      query += ' AND routeName ILIKE $1';
+      values.push(`%${name}%`);
+    }
+    if (grade) {
+      query += ` AND grade = $${values.length + 1}`;
+      values.push(grade);
+    }
+    if (safety) {
+      query += ` AND safety = $${values.length + 1}`;
+      values.push(safety);
+    }
+    if (firstascent) {
+      query += ` AND firstAscent ILIKE $${values.length + 1}`;
+      values.push(`%${firstascent}%`);
+    }
+    if (areaname) {
+      query += ` AND areaName ILIKE $${values.length + 1}`;
+      values.push(`%${areaname}%`);
+    }
+    if (types) {
+      const typeFilters = types.split(',').map(type => `${type} = true`);
+      query += ` AND (${typeFilters.join(' OR ')})`;
+    }
 
-      const routes = await db.any(query, values);
+    const routes = await db.any(query, values);
 
-      res.render('pages/routes', {
-          username: req.session.user.username,
-          email: req.session.user.email,
-          routes: routes,
-          isRoutes:true,
-      });
+    res.render('pages/routes', {
+      username: req.session.user.username,
+      email: req.session.user.email,
+      routes: routes,
+      isRoutes: true,
+    });
   } catch (error) {
-      console.error('Error fetching routes:', error.message);
-      res.status(500).send('Server Error');
+    console.error('Error fetching routes:', error.message);
+    res.status(500).send('Server Error');
   }
 });
 
 app.get('/route/:id', async (req, res) => {
   const routeId = req.params.id;
   try {
-      // Fetch the route details
-      const route = await db.oneOrNone('SELECT * FROM routes WHERE id = $1', [routeId]);
+    // Fetch the route details
+    const route = await db.oneOrNone('SELECT * FROM routes WHERE id = $1', [routeId]);
 
-      if (!route) {
-          return res.status(404).send('Route not found');
-      }
+    if (!route) {
+      return res.status(404).send('Route not found');
+    }
 
-      // Fetch reviews for the route
-      const reviews = await db.any('SELECT * FROM reviews WHERE route_id = $1', [routeId]);
+    // Fetch reviews for the route
+    const reviews = await db.any('SELECT * FROM reviews WHERE route_id = $1', [routeId]);
 
-      res.render('pages/route', {
-          username: req.session.user.username,
-          email: req.session.user.email,
-          route: route,
-          reviews: reviews,
-      });
+    res.render('pages/route', {
+      username: req.session.user.username,
+      email: req.session.user.email,
+      route: route,
+      reviews: reviews,
+    });
   } catch (error) {
-      console.error('Error fetching route details:', error.message);
-      res.status(500).send('Server Error');
+    console.error('Error fetching route details:', error.message);
+    res.status(500).send('Server Error');
   }
 });
 
@@ -232,15 +232,15 @@ app.post('/add-review', async (req, res) => {
   const { route_id, author, rating, comment } = req.body;
 
   try {
-      await db.none(
-          'INSERT INTO reviews (author, body, rating, route_id) VALUES ($1, $2, $3, $4)',
-          [author, body, rating, route_id]
-      );
+    await db.none(
+      'INSERT INTO reviews (author, body, rating, route_id) VALUES ($1, $2, $3, $4)',
+      [author, body, rating, route_id]
+    );
 
-      res.redirect(`/route/${route_id}`);
+    res.redirect(`/route/${route_id}`);
   } catch (error) {
-      console.error('Error adding review:', error.message);
-      res.status(500).send('Server Error');
+    console.error('Error adding review:', error.message);
+    res.status(500).send('Server Error');
   }
 });
 
@@ -267,11 +267,37 @@ app.post('/add-route', async (req, res) => {
   }
 });
 
+app.post('/delete-route/:id', async (req, res) => {
+  const routeId = req.params.id;
+
+  if (!req.session.user || req.session.user.username !== "admin") {
+    return res.status(403).send('Forbidden: Only admins can delete routes');
+  }
+
+  try {
+    const route = await db.oneOrNone('SELECT * FROM routes WHERE id = $1', [routeId]);
+
+    if (!route) {
+      return res.status(404).send('Route not found');
+    }
+
+    await db.none('UPDATE routes SET deleted = TRUE WHERE id = $1', [routeId]);
+    console.log(`Route marked as deleted: ${route.routeName} (ID: ${route.id})`);
+    res.redirect('/routes');
+  } catch (error) {
+    console.error('Error deleting route:', error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.render('pages/logout', { message: `Logged out successfully!` });
 });
+
 
 
 async function getMessages(user) {
@@ -285,9 +311,9 @@ async function getMessages(user) {
     let topLevelMessages = [];
 
     messages.forEach(msg => {
-        messageMap[msg.id] = { ...msg, replies: [], username: user };
+      messageMap[msg.id] = { ...msg, replies: [], username: user };
     });
-    
+
     messages.forEach(msg => {
       if (msg.parentid) {
 
@@ -330,7 +356,7 @@ app.post('/messageboard', async (req, res) => {
 
     console.log('New message added:', newMessage);
 
-      res.status(200).json({ message: 'Message added successfully'});
+    res.status(200).json({ message: 'Message added successfully' });
   } catch (error) {
     console.error('Error adding message:', error);
     res.status(500).send('Server Error');
@@ -360,7 +386,7 @@ app.post('/add-reply', async (req, res) => {
 
 app.post('/delete-message/:id', async (req, res) => {
   const { id } = req.params;
-  const { hasReplies } = req.body; 
+  const { hasReplies } = req.body;
 
   try {
     if (hasReplies) {
@@ -392,7 +418,7 @@ app.post('/delete-message/:id', async (req, res) => {
 app.get('/messageboard', async (req, res) => {
   try {
     const messages = await getMessages(req.session.user.username);
-    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages,isMessageBoard:true }); // Render messages with Handlebars
+    res.render('pages/messageboard', { username: req.session.user.username, email: req.session.user.email, boardmessages: messages, isMessageBoard: true }); // Render messages with Handlebars
   } catch (error) {
     res.status(500).send('Server Error');
   }

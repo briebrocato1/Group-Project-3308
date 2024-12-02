@@ -190,3 +190,29 @@ document.getElementById('closeModal').addEventListener('click', () => {
   document.getElementById('filterModal').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+      button.addEventListener("click", async (e) => {
+          const routeId = button.getAttribute("data-route-id");
+
+          if (confirm("Are you sure you want to delete this route?")) {
+              try {
+                  const response = await fetch(`/route/${routeId}`, {
+                      method: "DELETE",
+                  });
+
+                  if (response.ok) {
+                      alert("Route deleted successfully.");
+                      window.location.href = "/routes"; // Redirect to the routes page
+                  } else {
+                      alert("Failed to delete the route.");
+                  }
+              } catch (err) {
+                  console.error("Error:", err);
+                  alert("An error occurred.");
+              }
+          }
+      });
+  });
+});

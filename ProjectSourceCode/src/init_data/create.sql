@@ -24,7 +24,7 @@ CREATE TABLE routes (
     areaName VARCHAR(255),
     firstAscent VARCHAR(255),
     rating VARCHAR(255),
-    deleted BOOLEAN
+    deleted BOOLEAN DEFAULT FALSE
 );
 
 

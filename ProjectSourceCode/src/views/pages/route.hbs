@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{route.routename}} - Details</title>
 </head>
+
 <body>
     <div class="container">
-             <!-- Delete button for admin user -->
         {{#ifeq username "admin"}}
-            <button class="delete-btn" data-route-id="{{route.id}}">Delete Route</button>
-        {{/ifeq}}
+        <form method="POST" action="/delete-route/{{route.id}}">
+            <button type="submit" class="delete-button">Delete</button>
+        </form>
+         {{/ifeq}}
         <h1>{{route.routename}}</h1>
         <p><strong>Location:</strong> Area Name: {{route.areaname}}, Relative area: {{route.location}}</p>
         <p><strong>Coordinates:</strong> Lat: {{route.arealatitude}}, Long: {{route.arealongitude}}</p>
         <p><strong>Difficulty:</strong> {{route.grade}}</p>
         <p><strong>Safety:</strong> {{route.safety}}</p>
         <p><strong>First Ascent:</strong> {{route.firstascent}}</p>
-        <p><strong>Types:</strong> 
-            {{#if route.sport}}Sport{{/if}} 
-            {{#if route.trad}}Trad{{/if}} 
-            {{#if route.toprope}}Top Rope{{/if}} 
-            {{#if route.boulder}}Boulder{{/if}} 
-            {{#if route.snow}}Snow{{/if}} 
+        <p><strong>Types:</strong>
+            {{#if route.sport}}Sport{{/if}}
+            {{#if route.trad}}Trad{{/if}}
+            {{#if route.toprope}}Top Rope{{/if}}
+            {{#if route.boulder}}Boulder{{/if}}
+            {{#if route.snow}}Snow{{/if}}
             {{#if route.alpine}}Alpine{{/if}}
         </p>
         <p><strong>Description:</strong> {{route.description}}</p>
 
-       
+
 
         <h2>Reviews</h2>
         {{#if reviews.length}}
-            {{#each reviews}}
-                <div class="review">
-                    <p><strong>{{this.author}}:</strong> {{this.body}}</p>
-                    <p><em>Rating:</em> {{this.rating}}/5</p>
-                </div>
-            {{/each}}
+        {{#each reviews}}
+        <div class="review">
+            <p><strong>{{this.author}}:</strong> {{this.body}}</p>
+            <p><em>Rating:</em> {{this.rating}}/5</p>
+        </div>
+        {{/each}}
         {{else}}
-            <p>No reviews yet. Be the first to add one!</p>
+        <p>No reviews yet. Be the first to add one!</p>
         {{/if}}
 
         <h3>Add a Review</h3>
@@ -53,7 +56,8 @@
             <button type="submit">Submit</button>
         </form>
 
-     
+
     </div>
 </body>
+
 </html>
