@@ -57,21 +57,6 @@ app.use(
   })
 );
 
-async function insertadmin() {
-    try {
-        const admin = await db.oneOrNone(`SELECT * FROM users WHERE username='admin';`);
-        if (!admin) {
-            const adminpwd = await bcrypt.hash('s3cur3Ish',10);
-            await db.none(`INSERT INTO users (username,email,password) VALUES ('admin','krof5695@colorado.edu','${adminpwd}');`);
-        }
-    }
-    catch (err) {
-        console.log(err);
-    }
-}
-
-insertadmin();
-
 //Routes
 
 app.get('/welcome', (req, res) => {
@@ -138,7 +123,7 @@ app.post('/login', async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.render('pages/login', { message: `An error occurred. Please try again.` });
+    res.status(400).render('pages/login', { message: `An error occurred. Please try again.` });
   }
 });
 
@@ -417,6 +402,7 @@ app.post('/delete-message/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 });
+
 
 // Define route for displaying messages
 app.get('/messageboard', async (req, res) => {
