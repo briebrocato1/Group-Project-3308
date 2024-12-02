@@ -6,7 +6,7 @@ const path = require('path');
 const pgp = require('pg-promise')();
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const bcrypt = require('bcryptjs'); //hash passwords
+const bcrypt = require('bcryptjs'); //hash passwords 
 const axios = require('axios');
 
 
@@ -20,7 +20,7 @@ const hbs = handlebars.create({
 Handlebars.registerHelper('ifeq', function (v1, v2, options) { return (v1 == v2) ? options.fn(this) : options.inverse(this); });
 
 const dbConfig = {
-  host: process.env.POSTGRES_HOST,
+  host: 'db',
   port: process.env.POSTGRES_PORT,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -68,7 +68,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('pages/register', { message: req.query.message });
+  res.render('pages/register', { message: req.query.message,
+    logIn: true,
+  });
 });
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -98,7 +100,9 @@ app.post('/register', async (req, res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render('pages/login');
+  res.render('pages/login', {
+    logIn:true,
+});
 });
 
 app.post('/login', async (req, res) => {
@@ -142,6 +146,8 @@ app.get('/home', (req, res) => {
   res.render('pages/home', { username: req.session.user.username, email: req.session.user.email });
 });
 
+
+
 app.get('/routes', async (req, res) => {
   try {
     const { name, grade, safety, types, firstascent, areaname } = req.query;
@@ -149,6 +155,7 @@ app.get('/routes', async (req, res) => {
     let query = 'SELECT * FROM routes WHERE deleted = FALSE';
     const values = [];
 
+ 
     if (name) {
       query += ' AND routeName ILIKE $1';
       values.push(`%${name}%`);
@@ -175,7 +182,6 @@ app.get('/routes', async (req, res) => {
     }
 
     const routes = await db.any(query, values);
-
     res.render('pages/routes', {
       username: req.session.user.username,
       email: req.session.user.email,
