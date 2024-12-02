@@ -1,5 +1,4 @@
 node_modules
 package-lock.json
 .env
-init_dh.sh
-
+**/init_db.sh
