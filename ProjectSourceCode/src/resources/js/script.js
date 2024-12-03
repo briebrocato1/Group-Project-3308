@@ -192,42 +192,61 @@
 // });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Open and close modals
-  document.getElementById('openModalBtn')?.addEventListener('click', () => {
-    document.getElementById('messageModal').style.display = 'block';
-  });
+  // Open and close modal
+  const openModalBtn = document.getElementById('openModalBtn');
+  const messageModal = document.getElementById('messageModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
 
-  document.getElementById('closeModalBtn')?.addEventListener('click', () => {
-    document.getElementById('messageModal').style.display = 'none';
-  });
+  if (openModalBtn && closeModalBtn && messageModal) {
+    openModalBtn.addEventListener('click', () => {
+      messageModal.style.display = 'block';
+    });
 
-  // Submit message form
-  const messageForm = document.getElementById('messageForm');
-  if (messageForm) {
-    messageForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const author = document.getElementById('author').value;
-      const text = document.getElementById('text').value;
-
-      fetch('/messageboard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ author, text }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            document.getElementById('messageModal').style.display = 'none';
-            window.location.reload();
-          } else {
-            alert('Failed to submit message');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('Failed to submit message');
-        });
+    closeModalBtn.addEventListener('click', () => {
+      messageModal.style.display = 'none';
     });
   }
+
+  // Submit a new message
+  const messageForm = document.getElementById('messageForm');
+  if (messageForm) {
+    // Remove existing event listener (if any) before adding
+    messageForm.removeEventListener('submit', handleMessageSubmit);
+    messageForm.addEventListener('submit', handleMessageSubmit);
+  }
+});
+
+// Function to handle message submission
+async function handleMessageSubmit(event) {
+  event.preventDefault();
+
+  // Prevent duplicate submissions by disabling the submit button
+  const submitButton = event.target.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+
+  const author = document.getElementById('author').value;
+  const text = document.getElementById('text').value;
+
+  try {
+    const response = await fetch('/messageboard', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ author, text }),
+    });
+
+    if (!response.ok) throw new Error('Failed to add message');
+
+    const { message } = await response.json();
+    console.log('Message added:', message);
+
+    // Optionally reload or append message to UI
+    location.reload();
+  } catch (error) {
+    console.error('Error adding message:', error);
+  } finally {
+    submitButton.disabled = false;
+  }
+}
 
   // Toggle reply forms
   document.querySelectorAll('.add-reply-btn').forEach((button) => {
@@ -351,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addRouteModal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
   });
-});
+
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".delete-btn").forEach((button) => {
