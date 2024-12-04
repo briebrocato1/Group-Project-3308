@@ -4,24 +4,24 @@
     <p>{{text}}</p>
 
     {{#if username}}
-    <button class="add-reply-btn" data-message-id="{{id}}" style="zindex:1000px;">Add Reply</button>
+    <button class="add-reply-btn routes-button" data-message-id="{{id}}" style="zindex:1000px;">Add Reply</button>
     {{else}}
-    <button class="add-reply-btn" data-message-id="{{id}}" style="zindex:1000px;" disabled>Add Reply</button>
+    <button class="add-reply-btn routes-button" data-message-id="{{id}}" style="zindex:1000px;" disabled>Add Reply</button>
     {{/if}}
 
     {{#ifeq username author}}
-    <button class="message-delete-btn" data-message-id="{{id}}" style="zindex:1000px;">Delete</button>
+    <button class="message-delete-btn routes-button" data-message-id="{{id}}" style="zindex:1000px;">Delete</button>
     {{else}}
         {{#ifeq username "admin"}}
-        <button class="message-delete-btn" data-message-id="{{id}}"style="zindex:1000px;">Delete</button>
+        <button class="message-delete-btn routes-button" data-message-id="{{id}}"style="zindex:1000px;">Delete</button>
         {{else}}
-        <button class="message-delete-btn" data-message-id="{{id}}" style="zindex:1000px;"disabled>Delete</button>
+        <button class="message-delete-btn routes-button" data-message-id="{{id}}" style="zindex:1000px;"disabled>Delete</button>
         {{/ifeq}}
     {{/ifeq}}
     <div class="reply-form" id="reply-form-{{id}}" style="display: none;">
         <form class="replyForm" data-parent-id="{{id}}">
             <textarea id="reply-text-{{id}}" name="text" placeholder="Write your reply..." required></textarea>
-            <button type="submit">Submit Reply</button>
+            <button type="submit" class="routes-button">Submit Reply</button>
         </form>
     </div>
 
