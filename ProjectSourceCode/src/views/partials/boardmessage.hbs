@@ -4,18 +4,18 @@
     <p>{{text}}</p>
 
     {{#if username}}
-    <button class="add-reply-btn" data-message-id="{{id}}">Add Reply</button>
+    <button class="add-reply-btn" data-message-id="{{id}}" style="zindex:1000px;">Add Reply</button>
     {{else}}
-    <button class="add-reply-btn" data-message-id="{{id}}" disabled>Add Reply</button>
+    <button class="add-reply-btn" data-message-id="{{id}}" style="zindex:1000px;" disabled>Add Reply</button>
     {{/if}}
 
     {{#ifeq username author}}
-    <button class="delete-btn" data-message-id="{{id}}">Delete</button>
+    <button class="message-delete-btn" data-message-id="{{id}}" style="zindex:1000px;">Delete</button>
     {{else}}
         {{#ifeq username "admin"}}
-        <button class="delete-btn" data-message-id="{{id}}">Delete</button>
+        <button class="message-delete-btn" data-message-id="{{id}}"style="zindex:1000px;">Delete</button>
         {{else}}
-        <button class="delete-btn" data-message-id="{{id}}" disabled>Delete</button>
+        <button class="message-delete-btn" data-message-id="{{id}}" style="zindex:1000px;"disabled>Delete</button>
         {{/ifeq}}
     {{/ifeq}}
     <div class="reply-form" id="reply-form-{{id}}" style="display: none;">
