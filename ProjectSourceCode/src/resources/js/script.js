@@ -230,17 +230,22 @@ async function handleMessageSubmit(event) {
     });
   });
 
-  // Dropdown filters
-  document.getElementById('typeDropdownButton')?.addEventListener('click', () => {
-    const menu = document.getElementById('typeDropdownMenu');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
+// Add event listener to the dropdown button
+document.getElementById('typeDropdownButton').addEventListener('click', (event) => {
 
-  // window.addEventListener('click', (event) => {
-  //   if (!event.target.closest('#typeDropdownButton') && !event.target.closest('#dropdownContent')) {
-  //     dropdownContent.style.display = 'none'; // Hide dropdown
-  //   }
-  // });
+  event.stopPropagation();
+  const menu = document.getElementById('typeDropdownMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+});
+
+// Add event listener to the window to handle clicks outside the dropdown
+window.addEventListener('click', (event) => {
+  const menu = document.getElementById('typeDropdownMenu');
+
+  if (menu && !event.target.closest('#typeDropdown')) {
+    menu.style.display = 'none';
+  }
+});
 
   // Filter modal
   document.getElementById('filterModalButton')?.addEventListener('click', () => {
