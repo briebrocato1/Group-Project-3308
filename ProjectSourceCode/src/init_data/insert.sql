@@ -9,4 +9,3 @@ INSERT INTO messages (author, text, parentID) VALUES
 
 ('Ollie', 'Anyone going to be at the 1st Flatiron Sunday?', 3); -- Reply to message 1 (parentID = 1)
 
-

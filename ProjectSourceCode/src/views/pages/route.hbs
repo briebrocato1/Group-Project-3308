@@ -5,6 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{route.routename}} - Details</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('/img/fall.jpg'); /* Path to your image */
+            background-size: cover; /* Makes the image cover the entire background */
+            background-position: center; /* Centers the image */
+            background-attachment: fixed; /* Makes the background stay fixed while scrolling */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-image: url('your-image.jpg'); /* Path to your image */
+            background-size: cover; /* Makes the image cover the entire container */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        .review {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .type-badge {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,12 +125,12 @@
         <p><strong>Safety:</strong> {{route.safety}}</p>
         <p><strong>First Ascent:</strong> {{route.firstascent}}</p>
         <p><strong>Types:</strong>
-            {{#if route.sport}}Sport{{/if}}
-            {{#if route.trad}}Trad{{/if}}
-            {{#if route.toprope}}Top Rope{{/if}}
-            {{#if route.boulder}}Boulder{{/if}}
-            {{#if route.snow}}Snow{{/if}}
-            {{#if route.alpine}}Alpine{{/if}}
+             {{#if route.sport}}<span class="type-badge">Sport</span>{{/if}}
+            {{#if route.trad}}<span class="type-badge">Trad</span>{{/if}}
+            {{#if route.toprope}}<span class="type-badge">Top Rope</span>{{/if}}
+            {{#if route.boulder}}<span class="type-badge">Boulder</span>{{/if}}
+            {{#if route.snow}}<span class="type-badge">Snow</span>{{/if}}
+            {{#if route.alpine}}<span class="type-badge">Alpine</span>{{/if}}
         </p>
         <p><strong>Description:</strong> {{route.description}}</p>
 
@@ -48,9 +152,9 @@
         <form action="/add-review" method="POST">
             <input type="hidden" name="route_id" value="{{route.id}}">
             <label for="author">Your Name:</label>
-            <input type="text" name="author" required><br>
+            <input type="text" name="author" required>  
             <label for="rating">Rating (1-5):</label>
-            <input type="number" name="rating" min="1" max="5" required><br>
+            <input type="number" name="rating" min="1" max="5" required>
             <label for="body">Review:</label>
             <textarea name="body" rows="4" required></textarea><br>
             <button type="submit" style="zindex:1000px" class="filter-buttons">Submit</button>
