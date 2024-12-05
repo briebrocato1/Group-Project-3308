@@ -237,8 +237,8 @@ async function handleMessageSubmit(event) {
   });
 
   window.addEventListener('click', (event) => {
-    if (!event.target.matches('#typeDropdownButton')) {
-      var element = document.getElementById('typeDropdownMenu'); if (element) { element.style.display = 'none'; }
+    if (!event.target.closest('#typeDropdownButton') && !event.target.closest('#dropdownContent')) {
+      dropdownContent.style.display = 'none'; // Hide dropdown
     }
   });
 
