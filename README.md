@@ -14,5 +14,5 @@ Instructions:
 
 How to run tests:
 
-Link:
+Link: https://bouldering-buffs.onrender.com/home
 
