@@ -83,23 +83,9 @@ textarea {
     margin: 0 auto; /* Center horizontally */
 }
 
-.message-box {
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px; /* Space inside the box */
-    margin-bottom: 15px; /* Space between boxes */
-    margin-left: 15px;
-    margin-right: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    background-color: #eee; /* Light background color */
-}
 
-.replies-container {
-    position: relative;
-}
 
-.replies {
-    margin-left: 2em; /* Indent the replies */ 
+.message-container {
     position: relative;
 }
 
@@ -108,6 +94,22 @@ textarea {
     position: absolute;
     left: -2em; /* Position the "L" line */
     top: 2.5em; /* Adjust to align with the start of the message */
+    width: 2em; /* Horizontal line length */
+    height: 2px; /* Line thickness */
+    background-color: #ccc;
+}
+
+.replies {
+    margin-left: 2em; /* Indent the replies */ 
+    position: relative;
+    margin-top: 13px;
+}
+
+.replies > .message::before {
+    content: "";
+    position: absolute;
+    left: -2em; /* Align with the vertical line of the parent message */
+    top: 1.5em; /* Keep horizontal line aligned with the parent’s horizontal line */
     width: 2em; /* Horizontal line length */
     height: 2px; /* Line thickness */
     background-color: #ccc;
@@ -123,7 +125,16 @@ textarea {
     background-color: #ccc;
 }
 
-
+.message-box {
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Space inside the box */
+    margin-bottom: 15px; /* Space between boxes */
+    margin-left: 15px;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    background-color: #eee; /* Light background color */
+}
 
 
 /* Routes CSS */
@@ -177,7 +188,6 @@ textarea {
     /* max-width: 600px; */
     width: 40%;
 }
-
 
 
 
