@@ -211,7 +211,8 @@ app.get('/route/:id', async (req, res) => {
       username: req.session.user.username,
       email: req.session.user.email,
       route: route,
-      reviews: reviews,
+        reviews: reviews,
+      routePage:true,
     });
   } catch (error) {
     console.error('Error fetching route details:', error.message);
