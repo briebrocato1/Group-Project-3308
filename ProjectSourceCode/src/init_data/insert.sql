@@ -7,6 +7,6 @@ INSERT INTO messages (author, text, parentID) VALUES
 (`Bouldering Buffs`, `Post here to find climbing partners. Remember to not post personal info, and just meet up on the mountain!`, NULL), -- Message 3
 
 
-(`Ollie`, `Anyone going to be at the 1st Flatiron Sunday?`, 3), -- Reply to message 1 (parentID = 1);
+(`Ollie`, `Anyone going to be at the 1st Flatiron Sunday?`, 3); -- Reply to message 1 (parentID = 1)
 
 
