@@ -23,11 +23,19 @@ CREATE TABLE routes (
     areaLatitude DECIMAL(9,6), 
     areaName VARCHAR(255),
     firstAscent VARCHAR(255),
-    rating VARCHAR(255),
+    rating DECIMAL(2,1),
+    rating_count INTEGER DEFAULT 0,
     deleted BOOLEAN DEFAULT FALSE
 );
 
-
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    route_id INTEGER REFERENCES routes(id),
+    author VARCHAR(255) NOT NULL,
+    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+    body TEXT NOT NULL
+);
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (

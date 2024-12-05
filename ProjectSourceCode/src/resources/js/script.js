@@ -236,11 +236,11 @@ async function handleMessageSubmit(event) {
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
   });
 
-  window.addEventListener('click', (event) => {
-    if (!event.target.matches('#typeDropdownButton')) {
-      var element = document.getElementById('typeDropdownMenu'); if (element) { element.style.display = 'none'; }
-    }
-  });
+  // window.addEventListener('click', (event) => {
+  //   if (!event.target.closest('#typeDropdownButton') && !event.target.closest('#dropdownContent')) {
+  //     dropdownContent.style.display = 'none'; // Hide dropdown
+  //   }
+  // });
 
   // Filter modal
   document.getElementById('filterModalButton')?.addEventListener('click', () => {
