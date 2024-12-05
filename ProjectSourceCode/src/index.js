@@ -211,7 +211,8 @@ app.get('/route/:id', async (req, res) => {
       username: req.session.user.username,
       email: req.session.user.email,
       route: route,
-      reviews: reviews,
+        reviews: reviews,
+      routePage:true,
     });
   } catch (error) {
     console.error('Error fetching route details:', error.message);
@@ -220,20 +221,34 @@ app.get('/route/:id', async (req, res) => {
 });
 
 app.post('/add-review', async (req, res) => {
-  const { route_id, author, rating, comment } = req.body;
+  const { route_id, author, rating, body } = req.body;
 
   try {
+    // 1. Insert the new review into the reviews table
     await db.none(
-      'INSERT INTO reviews (author, body, rating, route_id) VALUES ($1, $2, $3, $4)',
-      [author, body, rating, route_id]
+      'INSERT INTO reviews (route_id, author, rating, body) VALUES ($1, $2, $3, $4)',
+      [route_id, author, rating, body]
     );
 
+    // 2. Update the route's average rating and increment the rating count
+    await db.none(
+      `UPDATE routes 
+       SET rating = (
+         (rating * rating_count + $1) / (rating_count + 1)
+       ),
+       rating_count = rating_count + 1
+       WHERE id = $2`,
+      [rating, route_id]
+    );
+
+    // 3. Redirect back to the route details page
     res.redirect(`/route/${route_id}`);
   } catch (error) {
     console.error('Error adding review:', error.message);
     res.status(500).send('Server Error');
   }
 });
+
 
 
 app.post('/add-route', async (req, res) => {
