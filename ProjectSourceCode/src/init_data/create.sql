@@ -5,7 +5,7 @@ CREATE TABLE users (
   password CHAR(60) NOT NULL
 );
 
-DROP TABLE IF EXISTS routes;
+DROP TABLE IF EXISTS routes CASCADE;
 CREATE TABLE routes (
     id SERIAL PRIMARY KEY,
     routeName VARCHAR(255) NOT NULL,

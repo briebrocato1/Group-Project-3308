@@ -2,3 +2,6 @@ node_modules
 package-lock.json
 .env
 **/init_db.sh
+create.sql
+insert.sql
+routes_insert.sql
