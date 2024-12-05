@@ -5,7 +5,7 @@ Our site will include a full database of climbs in the Boulder area pulled from 
 
 Contributors: Arielan Palencia Li, Oliver Costello, Brie Brocato, Suhani Agarwal, Kristin Off
 
-Technology Stack Used: HTML, CSS, PostgreSQL, Docker, NodeJS
+Technology Stack Used: HTML, CSS, PostgreSQL, Docker, NodeJS, Python, Mocha, Render, Express
 
 Prerequisites:
 https://github.com/OpenBeta/climbing-data/tree/main
