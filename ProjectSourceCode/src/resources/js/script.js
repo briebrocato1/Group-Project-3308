@@ -1,4 +1,3 @@
-
   document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.add-reply-btn').forEach(button => {
