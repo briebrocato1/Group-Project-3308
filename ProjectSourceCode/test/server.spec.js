@@ -102,4 +102,85 @@ describe('Negative: Testing Redirect', () => {
       });
   });
 });
+
+describe('Testing add route API', () => {
+  it('positive : /add-route', done => {
+    chai
+      .request(server)
+      .post('/add-route')
+      .send({routeName: 'test', grade: 'V0', safety: 'PG', sport: true, trad: true, toprope: true, boulder: true, snow: true, alpine: true, description: 'test1', location: 'test2', areaLatitude: 111.111, areaLongitude: 222.222, areaName: 'test3', firstAscent: 'tester', rating: 5})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+it('Negative : /add-route. Missing fields', done => {
+  chai
+    .request(server)
+    .post('/add-route')
+    .send({areaName: 'noName'})
+    .end((err, res) => {
+      expect(res).to.have.status(500);
+      done();
+    });
+});
+it('Negative : /add-route. Duplicate', done => {
+  chai
+    .request(server)
+    .post('/add-route')
+    .send({routeName: 'test', grade: 'V0', safety: 'PG', sport: true, trad: true, toprope: true, boulder: true, snow: true, alpine: true, description: 'test1', location: 'test2', areaLatitude: 111.111, areaLongitude: 222.222, areaName: 'test3', firstAscent: 'tester', rating: 5})
+    .end((err, res) => {
+      expect(res).to.have.status(400);
+      done();
+    });
+});
+});
+
+describe('testing Routes API', () => {
+  // Sample test case given to test /test endpoint.
+  it('/routes should display HTML', done => {
+    chai
+      .request(server)
+      .post('/routes')
+      .end((err, res) => {
+        res.should.have.status(404); 
+        res.should.be.html; 
+        done();
+      });
+  });
+  it('/routes should return routes filtered by name', done => {
+    chai
+      .request(server)
+      .get('/routes')
+      .query({ name: 'test' })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.html;
+        res.text.should.include('test');
+        done();
+      });
+  });
+  it('/routes should display "No routes available" when no routes match the query', done => {
+    chai
+      .request(server)
+      .get('/routes')
+      .query({ name: 'nonexistent-route' }) 
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.text.should.include('No routes available');
+        done();
+      });
+  });
+  it('/routes should display all routes when no query parameters are provided', done => {
+    chai
+      .request(server)
+      .get('/routes')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.text.should.not.include('No routes available');
+        done();
+      });
+  });
+});
 // ********************************************************************************
