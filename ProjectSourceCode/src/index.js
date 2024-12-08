@@ -154,7 +154,6 @@ app.get('/routes', async (req, res) => {
 
     let query = 'SELECT * FROM routes WHERE deleted = FALSE';
     const values = [];
-
  
     if (name) {
       query += ' AND routeName ILIKE $1';
@@ -256,11 +255,19 @@ app.post('/add-route', async (req, res) => {
     routeName, grade, safety, sport = false, trad = false, toprope = false, boulder = false,
     snow = false, alpine = false, description, location, areaLatitude, areaLongitude, areaName, firstAscent, rating
   } = req.body;
-
+  
   const latitude = areaLatitude ? parseFloat(areaLatitude) : null;
   const longitude = areaLongitude ? parseFloat(areaLongitude) : null;
-
+  console.log(routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, latitude, longitude, areaName, firstAscent, rating)
   try {
+    const existingRoute = await db.oneOrNone(
+      'SELECT id FROM routes WHERE routeName = $1',
+      [routeName]
+    );
+
+    if (existingRoute) {
+      return res.status(400).send('A route with this name already exists.');
+    }
     await db.none(
       `INSERT INTO routes (routeName, grade, safety, sport, trad, toprope, boulder, snow, alpine, description, location, areaLatitude, areaLongitude, areaName, firstAscent, rating)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
