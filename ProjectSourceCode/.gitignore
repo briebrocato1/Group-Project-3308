@@ -2,3 +2,5 @@ node_modules
 package-lock.json
 .env
 **/init_db.sh
+src/init_data/*.sql
+docker-compose.yaml

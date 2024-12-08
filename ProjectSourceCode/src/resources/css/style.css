@@ -39,6 +39,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 80%;
     max-width: 500px;
+    z-index: 1000;
 }
 
 .modal-content h2 {
@@ -57,7 +58,7 @@
 }
 
 #openModalBtn:disabled {
-    background-color: #ccc;
+    background-color: #c2d0da;
     cursor: not-allowed;
 }
 
@@ -82,23 +83,9 @@ textarea {
     margin: 0 auto; /* Center horizontally */
 }
 
-.message-box {
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px; /* Space inside the box */
-    margin-bottom: 15px; /* Space between boxes */
-    margin-left: 15px;
-    margin-right: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    background-color: #eee; /* Light background color */
-}
 
-.replies-container {
-    position: relative;
-}
 
-.replies {
-    margin-left: 2em; /* Indent the replies */ 
+.message-container {
     position: relative;
 }
 
@@ -109,7 +96,23 @@ textarea {
     top: 2.5em; /* Adjust to align with the start of the message */
     width: 2em; /* Horizontal line length */
     height: 2px; /* Line thickness */
-    background-color: #ccc;
+    background-color: #c2d0da;
+}
+
+.replies {
+    margin-left: 2em; /* Indent the replies */ 
+    position: relative;
+    margin-top: 13px;
+}
+
+.replies > .message::before {
+    content: "";
+    position: absolute;
+    left: -2em; /* Align with the vertical line of the parent message */
+    top: 1.5em; /* Keep horizontal line aligned with the parent’s horizontal line */
+    width: 2em; /* Horizontal line length */
+    height: 2px; /* Line thickness */
+    background-color: #c2d0da;
 }
 
 .replies::before {
@@ -119,9 +122,19 @@ textarea {
     top: 1em; /* Adjust this value to match the message content */
     width: 2px; /* Vertical line thickness */
     height: calc(100% - 2.5em); /* Extend to the height of the replies */
-    background-color: #ccc;
+    background-color: #c2d0da;
 }
 
+.message-box {
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Space inside the box */
+    margin-bottom: 15px; /* Space between boxes */
+    margin-left: 15px;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    background-color: #e5edf3; /* Light background color */
+}
 
 
 
@@ -143,7 +156,7 @@ textarea {
 }
 
 .routes-button:disabled {
-    background-color: #ccc;
+    background-color: #c2d0da;
     cursor: not-allowed;
 }
 
@@ -156,6 +169,29 @@ textarea {
     cursor: pointer;
     font-size: 1em;
 }
+
+#loginPage {
+    background-image: url('/img/valley.jpg'); 
+    background-size: cover;
+    background-position: center;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#loginForm {
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* max-width: 600px; */
+    width: 40%;
+}
+
+
+
 
 
 

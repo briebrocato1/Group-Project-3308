@@ -125,7 +125,7 @@
 
 <body>
     <div class="header-image">
-    <img src="/img/trees.jpg" alt="Routes Header" class="header-img">
+    <img src="/img/fall.jpg" alt="Routes Header" class="header-img">
     <h1 id="messageHead">Routes</h1>
     </div>
     <div class="container">
@@ -254,7 +254,7 @@
                     Unrated
                     {{/if}}
                 </p>
-                <p><strong>Location:</strong> {{this.areaname}} {{this.location}}</p>
+                <p><strong>Location:</strong> {{this.areaname}}</p>
                 <p><strong>Grade:</strong> {{this.grade}}</p>
                 <p><strong>First Ascent:</strong> {{this.firstascent}}</p>
                 <!-- Route Types -->
@@ -267,7 +267,6 @@
                     {{#if this.snow}}Snow{{/if}}
                     {{#if this.alpine}}Alpine{{/if}}
                 </p>
-                <p><strong>Description:</strong> {{this.description}}</p>
             </div>
             {{/each}}
         </div>
@@ -276,7 +275,6 @@
         {{/if}}
     </div>
 
-    <script src="/js/script.js"></script>
 </body>
 
 </html>
