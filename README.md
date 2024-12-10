@@ -8,7 +8,8 @@ Key features include:
 
 - A searchable database of climbing routes in the Boulder area, including contributions from the MountainProject database.  
 - User profiles that enable logged-in users to add routes, rate and review climbs, and participate in the community.  
-- A message board for planning meetups and connecting with fellow climbers.  
+- A message board for planning meetups and connecting with fellow climbers.
+
 By combining route discovery, user-generated contributions, and tools for community engagement, the platform supports climbers of all skill levels. Whether you're a college student exploring climbing for the first time or an  
 experienced climber looking to connect with others, our website is a hub for sharing knowledge, planning adventures, and building connections within the Boulder climbing community.  
 
