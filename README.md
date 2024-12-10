@@ -13,19 +13,11 @@ https://github.com/OpenBeta/climbing-data/tree/main
 Instructions:
 1. Clone the repository and make the following changes:
   - Create a .env file with the following information:
-      SESSION_SECRET="super duper secret!"
-      POSTGRES_USER="postgres"
-      POSTGRES_PASSWORD="pwd"
+      SESSION_SECRET="//YOUR SESSION SECRET\\"
+      POSTGRES_USER="//YOUR USER\\"
+      POSTGRES_PASSWORD="//YOUR PASSWORD\\"
       POSTGRES_DB="routes_db"
       POSTGRES_HOST = "db"
-  - In index.js, change the const db.config function to have 'db' set as its host
-      const dbConfig = {
-      host: 'db',
-      port: process.env.POSTGRES_PORT,
-      database: process.env.POSTGRES_DB,
-      user: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-    };
 2. To run the application:
 - Go to your console and make sure you are in the ProjectSourceCode folder
 - Run docker compose up
@@ -33,7 +25,7 @@ Instructions:
 - In your browser, go to localhost:3000
 
 How to run tests:
-After cloning the repository and following the instructions listed above, the console will run the tests after "docker compose up" is ran, and you can see them in the console.
+After cloning the repository and following the instructions listed above, the console will run the tests after "docker compose up" is run, and you can see them in the console.
 
 Link: https://bouldering-buffs.onrender.com/home
 
