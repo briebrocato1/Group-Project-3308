@@ -14,7 +14,7 @@ https://github.com/OpenBeta/climbing-data/tree/main
 
 ### Instructions:
 1. Clone the repository and make the following changes:  
-  - Create a .env file with the following information:  
+  - Create a .env file in the ProjectSourceCode folder with the following information:  
       SESSION_SECRET="//YOUR SESSION SECRET\\"  
       POSTGRES_USER="//YOUR USER\\"  
       POSTGRES_PASSWORD="//YOUR PASSWORD\\"
