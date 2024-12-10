@@ -1,7 +1,16 @@
 # Group-Project-3308
 ### Application Description:   
-We are creating an interactive database of rock-climbing routes in the Boulder area. We are creating a website catered to college students interested in climbing, with the ability to browse local routes, search for specific routes, view a message board, and create user profiles. Once logged into their profile, users will be able to add new routes, review/rate routes, post to the message board, and find climbing partners.  
-Our site will include a full database of climbs in the Boulder area pulled from MountainProject. Climbers will be able to add their own routes, provided they have proper documentation of the climbs.  
+Our project is a website designed to connect and support climbers in the Boulder area by offering a comprehensive, interactive climbing resource. The platform allows users to explore an easy-to-use database of local climbing routes, which includes detailed descriptions, ratings, and reviews. Users can search for routes based on various criteria and contribute to the database by adding new routes with proper documentation.  
+
+To foster a sense of community, the site features a message board where climbers can plan and organize meetups. Climbers can post about upcoming outings, invite others to join, and coordinate details like time and location. This makes it simple to find climbing partners, arrange group climbs, and share adventures with others.  
+
+Key features include:  
+
+- A searchable database of climbing routes in the Boulder area, including contributions from the MountainProject database.  
+- User profiles that enable logged-in users to add routes, rate and review climbs, and participate in the community.  
+- A message board for planning meetups and connecting with fellow climbers.  
+- By combining route discovery, user-generated contributions, and tools for community engagement, the platform supports climbers of all skill levels. Whether you're a college student exploring climbing for the first time or an  
+ experienced climber looking to connect with others, our website is a hub for sharing knowledge, planning adventures, and building connections within the Boulder climbing community.  
 
 ### Contributors:   
 Arielan Palencia Li, Oliver Costello, Brie Brocato, Suhani Agarwal, Kristin Off  
